@@ -370,7 +370,7 @@
       margin: 0;
     }
 
-    /* dice row */
+    /* dice row — now fully responsive */
     .dice-row {
       display: flex;
       flex-wrap: wrap;
@@ -395,6 +395,7 @@
       align-items: center;
       padding-left: 4px;
       transition: color 0.3s ease;
+      flex-shrink: 0;
     }
 
     .die-chip {
@@ -406,7 +407,7 @@
       gap: 10px;
       border: 1px solid var(--border-main);
       transition: border-color 0.15s, background 0.15s;
-      flex: 1;
+      flex: 1 1 0;
       min-width: 0;
     }
 
@@ -849,9 +850,188 @@
       transition: color 0.3s ease;
     }
 
-    /* combat mode hides difficulty card */
-    .combat-mode .difficulty-card {
-      display: none;
+    /* combat mode: difficulty card stays visible, but we change its label dynamically */
+    /* (no hiding rule anymore — the .combat-mode .difficulty-card rule is removed) */
+
+    /* ===== MOBILE RESPONSIVE DICE POOL ===== */
+    @media (max-width: 700px) {
+      .dice-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 16px 14px;
+      }
+
+      .dice-label {
+        padding-left: 0;
+        justify-content: center;
+        margin-bottom: 4px;
+        font-size: 0.8rem;
+      }
+
+      /* Each die chip becomes a row with icon left and controls right */
+      .die-chip {
+        flex: 1 1 100%;
+        width: 100%;
+        padding: 10px 14px;
+        justify-content: space-between;
+      }
+
+      .die-chip.fixed {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+        gap: 14px;
+      }
+
+      .die-controls {
+        flex: 0 1 auto;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .die-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        font-size: 0.8rem;
+      }
+
+      .die-count-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2rem;
+      }
+
+      .die-count-value {
+        font-size: 1.1rem;
+        min-width: 24px;
+      }
+
+      .fixed-value {
+        font-size: 1.2rem;
+        min-width: 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .calculator {
+        padding: 20px 14px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      h1 span {
+        font-size: 0.9rem;
+        padding: 4px 12px;
+      }
+
+      .mode-toggle {
+        width: 100%;
+      }
+
+      .mode-option {
+        flex: 1;
+        text-align: center;
+        padding: 10px 12px;
+        font-size: 0.8rem;
+      }
+
+      .input-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .input-card {
+        padding: 14px 16px;
+        border-radius: 18px;
+      }
+
+      .number-stepper button {
+        width: 40px;
+        height: 44px;
+      }
+
+      .number-stepper input {
+        font-size: 1.3rem;
+      }
+
+      .dice-row {
+        padding: 14px 12px;
+        border-radius: 20px;
+      }
+
+      .die-chip {
+        padding: 8px 10px;
+        border-radius: 14px;
+      }
+
+      .die-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 0.75rem;
+        border-radius: 9px;
+      }
+
+      .die-count-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+        border-radius: 8px;
+      }
+
+      .calculate-btn {
+        padding: 14px 20px;
+        font-size: 1rem;
+        border-radius: 40px;
+      }
+
+      .optimal-card {
+        padding: 18px 16px;
+        border-radius: 20px;
+      }
+
+      .optimal-header h2 {
+        font-size: 1.1rem;
+      }
+
+      .optimal-die-group {
+        padding: 6px 12px 6px 10px;
+      }
+
+      .optimal-die-count {
+        font-size: 1.3rem;
+      }
+
+      .stats-row {
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 14px;
+      }
+
+      .results-section {
+        padding: 16px 14px;
+        border-radius: 20px;
+      }
+
+      th, td {
+        padding: 6px 4px;
+        font-size: 0.8rem;
+      }
+
+      .reroll-prob-label {
+        min-width: 80px;
+        font-size: 0.75rem;
+      }
+
+      .reroll-prob-value {
+        min-width: 50px;
+        font-size: 0.75rem;
+      }
     }
   </style>
 </head>
@@ -880,7 +1060,7 @@
   <!-- main inputs -->
   <div class="input-grid">
     <div class="input-card difficulty-card" id="difficultyCard">
-      <label>Difficulty (target sum)</label>
+      <label id="difficultyLabel">Difficulty (target sum)</label>
       <div class="number-stepper">
         <button type="button" class="step-down" data-target="difficulty">−</button>
         <input type="number" id="difficulty" min="1" value="5" step="1">
@@ -1002,7 +1182,6 @@
       } else {
         document.documentElement.setAttribute('data-theme', theme);
       }
-      // update active state on buttons
       document.querySelectorAll('.theme-btn').forEach(b => {
         if (b.dataset.themeName === theme) {
           b.classList.add('active');
@@ -1015,9 +1194,7 @@
     function saveTheme(theme) {
       try {
         localStorage.setItem(THEME_KEY, theme);
-      } catch (e) {
-        // localStorage unavailable (e.g. private mode), silently ignore
-      }
+      } catch (e) {}
     }
 
     function loadTheme() {
@@ -1026,13 +1203,10 @@
         if (saved && VALID_THEMES.includes(saved)) {
           return saved;
         }
-      } catch (e) {
-        // localStorage unavailable
-      }
+      } catch (e) {}
       return 'default';
     }
 
-    // Apply theme on page load
     const initialTheme = loadTheme();
     applyTheme(initialTheme);
 
@@ -1056,7 +1230,7 @@
       }
     };
 
-    // ----- roll a single die (with exploding crits, crits can chain) -----
+    // ----- roll a single die -----
     function rollDie(dieType) {
       const faces = DICE_TYPES[dieType].faces;
       let total = 0;
@@ -1075,7 +1249,7 @@
       return { total, isBlank };
     }
 
-    // ----- simulate a full roll with reroll logic, track tokens used -----
+    // ----- simulate a full roll with reroll logic -----
     function simulateRoll(diceConfig, difficulty, modifier, rerollTokens) {
       let rolls = [];
       for (let i = 0; i < diceConfig.white; i++) rolls.push({ ...rollDie('WHITE'), type: 'WHITE' });
@@ -1230,6 +1404,7 @@
     const thSuccess = document.getElementById('thSuccess');
     const thFail = document.getElementById('thFail');
     const difficultyCard = document.getElementById('difficultyCard');
+    const difficultyLabel = document.getElementById('difficultyLabel');
     const calculator = document.getElementById('calculator');
 
     // ----- state -----
@@ -1245,11 +1420,14 @@
 
         if (currentMode === 'combat') {
           optimalBadge.textContent = 'highest avg';
-          calculator.classList.add('combat-mode');
+          difficultyLabel.textContent = 'Enemy Armor';
+          difficultyInput.value = Math.max(1, parseInt(difficultyInput.value) || 5);
         } else {
           optimalBadge.textContent = 'best chance';
-          calculator.classList.remove('combat-mode');
+          difficultyLabel.textContent = 'Difficulty (target sum)';
         }
+        // always recalculate when mode changes? optional, but we keep existing behavior
+        // the user can press calculate again. we'll just update the label.
       });
     });
 
@@ -1280,7 +1458,7 @@
       });
     });
 
-    // ----- theme switcher (with persistence) -----
+    // ----- theme switcher -----
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const theme = btn.dataset.themeName;
