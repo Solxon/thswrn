@@ -1347,21 +1347,22 @@
 
     // ----- roll a single die -----
     function rollDie(dieType) {
-      const faces = DICE_TYPES[dieType].faces;
-      let total = 0;
-      let face = faces[Math.floor(Math.random() * faces.length)];
+        const faces = DICE_TYPES[dieType].faces;
+        let total = 0;
+        let face = faces[Math.floor(Math.random() * faces.length)];
 
-      while (typeof face === 'object' && face.critical) {
-        total += face.value;
-        face = faces[Math.floor(Math.random() * faces.length)];
-      }
+        // Determine blank status from the FIRST face only
+        const firstFaceIsBlank = (typeof face !== 'object' && face === 0) ||
+                                (typeof face === 'object' && face.value === 0);
 
-      total += (typeof face === 'object') ? face.value : face;
+        while (typeof face === 'object' && face.critical) {
+            total += face.value;
+            face = faces[Math.floor(Math.random() * faces.length)];
+        }
 
-      const isBlank = (typeof face !== 'object' && face === 0) ||
-                      (typeof face === 'object' && face.value === 0);
+        total += (typeof face === 'object') ? face.value : face;
 
-      return { total, isBlank };
+        return { total, isBlank: firstFaceIsBlank };
     }
 
     // ----- simulate a full roll with reroll logic -----
