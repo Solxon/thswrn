@@ -1,1 +1,49 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My GitHub Page</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f6f8fa;
+            color: #24292e;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 { color: #0366d6; }
+        #status { font-weight: bold; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Hello!</h1>
+        <p>test</p>
+        
+        <!-- This part runs your code -->
+        <p id="status">Checking JavaScript execution...</p>
+    </div>
+
+    <script>
+        // Simple script to verify that JavaScript is running
+        document.addEventListener("DOMContentLoaded", () => {
+            const statusElement = document.getElementById("status");
+            statusElement.textContent = "JavaScript is running successfully!";
+            statusElement.style.color = "green";
+            console.log("GitHub Pages verification successful.");
+        });
+    </script>
+</body>
+</html>
