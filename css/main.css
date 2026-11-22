@@ -93,8 +93,8 @@ h1 span {
 .theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
 .theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
 .theme-btn[data-theme-name="crimson"] { background: linear-gradient(135deg, #160c0e, #e85a5a); }
-.theme-btn[data-theme-name="slate"] { background: linear-gradient(135deg, #0e1114, #9aaab8); }
 .theme-btn[data-theme-name="sand"] { background: linear-gradient(135deg, #1a1712, #d4a85a); }
+.theme-btn[data-theme-name="light"] { background: linear-gradient(135deg, #ffffff, #d4cec5); }
 
 /* mode toggle */
 .mode-toggle {
@@ -145,6 +145,7 @@ h1 span {
   padding: 18px 20px;
   border: 1px solid var(--border-main);
   transition: border-color 0.15s, background 0.3s ease;
+  min-width: 0;
 }
 
 .input-card:hover {
@@ -172,6 +173,8 @@ h1 span {
   border-radius: 18px;
   overflow: hidden;
   transition: border-color 0.15s, background 0.3s ease;
+  width: 100%;
+  min-width: 0;
 }
 
 .number-stepper:focus-within {
@@ -219,6 +222,7 @@ h1 span {
   outline: none;
   padding: 8px 0;
   min-width: 0;
+  width: 100%;
   -moz-appearance: textfield;
 }
 
@@ -795,23 +799,34 @@ tr.optimal-row td {
     font-size: 0.8rem;
   }
 
+  /* FIX: force single column + allow shrinking so steppers never overflow */
   .input-grid {
     grid-template-columns: 1fr;
     gap: 14px;
   }
 
   .input-card {
-    padding: 14px 16px;
+    padding: 14px 12px;
     border-radius: 18px;
+    min-width: 0;
+  }
+
+  .number-stepper {
+    width: 100%;
+    min-width: 0;
   }
 
   .number-stepper button {
-    width: 40px;
+    width: 36px;
     height: 44px;
+    font-size: 1.2rem;
+    flex-shrink: 0;
   }
 
   .number-stepper input {
     font-size: 1.3rem;
+    min-width: 0;
+    width: 100%;
   }
 
   .dice-row {
