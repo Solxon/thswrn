@@ -1,7 +1,7 @@
 /* Persistence layer for theme and input values via localStorage */
 const Storage = (function () {
   const THEME_KEY = 'oathsworn-theme';
-  const VALID_THEMES = ['default', 'ember', 'ocean', 'forest', 'royal', 'crimson', 'sand', 'light'];
+  const VALID_THEMES = ['default', 'ember', 'ocean', 'forest', 'royal', 'crimson', 'sand', 'light', 'pastel'];
   const STORAGE_KEYS = {
     difficulty: 'oathsworn-difficulty',
     modifier: 'oathsworn-modifier',

@@ -215,3 +215,31 @@
   --bar-fill-start: #8a8378;
   --bar-fill-end: #4a443c;
 }
+
+/* ===== PASTEL THEME ===== */
+[data-theme="pastel"] {
+  --bg-body: #f3effa;
+  --bg-panel: #faf7ff;
+  --bg-card: #f0eaf8;
+  --bg-input: #ffffff;
+  --bg-die-chip: #ffffff;
+  --bg-die-chip-hover: #ede6f7;
+  --bg-fixed: #ede6f7;
+  --border-main: #ddd4ec;
+  --border-light: #e8e0f5;
+  --border-focus: #a78bda;
+  --border-hover: #c4b0e8;
+  --text-primary: #3a2e4a;
+  --text-secondary: #52445f;
+  --text-muted: #8e7fa3;
+  --text-dim: #6e5f82;
+  --accent: #b8a0e8;
+  --accent-text: #2e2340;
+  --optimal-row-bg: #e6dcf5;
+  --spinner-track: #e8e0f5;
+  --tooltip-bg: #3a2e4a;
+  --tooltip-border: #6e5f82;
+  --bar-track: #ede6f7;
+  --bar-fill-start: #a78bda;
+  --bar-fill-end: #d4c4f0;
+}

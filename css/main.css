@@ -95,6 +95,7 @@ h1 span {
 .theme-btn[data-theme-name="crimson"] { background: linear-gradient(135deg, #160c0e, #e85a5a); }
 .theme-btn[data-theme-name="sand"] { background: linear-gradient(135deg, #1a1712, #d4a85a); }
 .theme-btn[data-theme-name="light"] { background: linear-gradient(135deg, #ffffff, #d4cec5); }
+.theme-btn[data-theme-name="pastel"] { background: linear-gradient(135deg, #f3effa, #b8a0e8); }
 
 /* mode toggle */
 .mode-toggle {
@@ -146,6 +147,7 @@ h1 span {
   border: 1px solid var(--border-main);
   transition: border-color 0.15s, background 0.3s ease;
   min-width: 0;
+  max-width: 100%;
 }
 
 .input-card:hover {
@@ -175,6 +177,7 @@ h1 span {
   transition: border-color 0.15s, background 0.3s ease;
   width: 100%;
   min-width: 0;
+  max-width: 100%;
 }
 
 .number-stepper:focus-within {
@@ -769,6 +772,38 @@ tr.optimal-row td {
     font-size: 1.2rem;
     min-width: 28px;
   }
+
+  /* Fix input card width on mobile */
+  .input-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .input-card {
+    padding: 14px 12px;
+    border-radius: 18px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .number-stepper {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .number-stepper button {
+    width: 36px;
+    height: 44px;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .number-stepper input {
+    font-size: 1.3rem;
+    min-width: 0;
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -809,11 +844,13 @@ tr.optimal-row td {
     padding: 14px 12px;
     border-radius: 18px;
     min-width: 0;
+    max-width: 100%;
   }
 
   .number-stepper {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
   }
 
   .number-stepper button {
