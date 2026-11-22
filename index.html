@@ -8,14 +8,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
-    /* ----- GLOBAL RESET & BASE ----- */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    /* ----- THEME VARIABLES (unchanged, used by all layouts) ----- */
+    /* ===== THEME VARIABLES ===== */
     :root {
       --bg-body: #0f0f12;
       --bg-panel: #1a1a1f;
@@ -151,7 +150,6 @@
       --bar-fill-end: #aa8ae8;
     }
 
-    /* ----- BODY & BASE (needed for all layouts) ----- */
     body {
       background: var(--bg-body);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -164,45 +162,7 @@
       transition: background 0.3s ease;
     }
 
-    /* ----- LAYOUT SWITCHER (new) ----- */
-    .layout-switcher {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-left: 16px;
-      flex-wrap: wrap;
-    }
-
-    .layout-btn {
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-      background: var(--bg-card);
-      border: 1px solid var(--border-main);
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .layout-btn:hover {
-      border-color: var(--border-hover);
-      color: var(--text-secondary);
-    }
-
-    .layout-btn.active {
-      background: var(--accent);
-      color: var(--accent-text);
-      border-color: var(--accent);
-    }
-
-    /* ============================================================
-       LAYOUT 1 – "CLASSIC" (original)
-       ============================================================ */
-    [data-layout="classic"] .calculator {
+    .calculator {
       max-width: 1000px;
       width: 100%;
       background: var(--bg-panel);
@@ -213,7 +173,7 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .header-row {
+    .header-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -222,7 +182,7 @@
       margin-bottom: 6px;
     }
 
-    [data-layout="classic"] h1 {
+    h1 {
       font-size: 2.2rem;
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -233,7 +193,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] h1 span {
+    h1 span {
       background: var(--border-main);
       color: var(--text-secondary);
       font-size: 1.1rem;
@@ -245,13 +205,14 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .theme-switcher {
+    /* theme switcher */
+    .theme-switcher {
       display: flex;
       gap: 8px;
       align-items: center;
     }
 
-    [data-layout="classic"] .theme-btn {
+    .theme-btn {
       width: 28px;
       height: 28px;
       border-radius: 50%;
@@ -261,23 +222,24 @@
       padding: 0;
     }
 
-    [data-layout="classic"] .theme-btn:hover {
+    .theme-btn:hover {
       transform: scale(1.15);
       border-color: var(--text-muted);
     }
 
-    [data-layout="classic"] .theme-btn.active {
+    .theme-btn.active {
       border-color: var(--text-primary);
       box-shadow: 0 0 0 2px var(--bg-panel), 0 0 0 4px var(--text-primary);
     }
 
-    [data-layout="classic"] .theme-btn[data-theme-name="default"] { background: linear-gradient(135deg, #1a1a1f, #f2efea); }
-    [data-layout="classic"] .theme-btn[data-theme-name="ember"] { background: linear-gradient(135deg, #1a1210, #e8805a); }
-    [data-layout="classic"] .theme-btn[data-theme-name="ocean"] { background: linear-gradient(135deg, #0a1218, #5aaae8); }
-    [data-layout="classic"] .theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
-    [data-layout="classic"] .theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
+    .theme-btn[data-theme-name="default"] { background: linear-gradient(135deg, #1a1a1f, #f2efea); }
+    .theme-btn[data-theme-name="ember"] { background: linear-gradient(135deg, #1a1210, #e8805a); }
+    .theme-btn[data-theme-name="ocean"] { background: linear-gradient(135deg, #0a1218, #5aaae8); }
+    .theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
+    .theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
 
-    [data-layout="classic"] .mode-toggle {
+    /* mode toggle */
+    .mode-toggle {
       display: flex;
       gap: 4px;
       margin: 20px 0 0;
@@ -288,7 +250,7 @@
       width: fit-content;
     }
 
-    [data-layout="classic"] .mode-option {
+    .mode-option {
       padding: 10px 24px;
       border-radius: 60px;
       font-weight: 600;
@@ -301,17 +263,17 @@
       transition: all 0.2s ease;
     }
 
-    [data-layout="classic"] .mode-option:hover {
+    .mode-option:hover {
       color: var(--text-secondary);
     }
 
-    [data-layout="classic"] .mode-option.active {
+    .mode-option.active {
       background: var(--accent);
       color: var(--accent-text);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    [data-layout="classic"] .input-grid {
+    .input-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 18px;
@@ -319,7 +281,7 @@
       margin-top: 24px;
     }
 
-    [data-layout="classic"] .input-card {
+    .input-card {
       background: var(--bg-card);
       border-radius: 22px;
       padding: 18px 20px;
@@ -327,11 +289,11 @@
       transition: border-color 0.15s, background 0.3s ease;
     }
 
-    [data-layout="classic"] .input-card:hover {
+    .input-card:hover {
       border-color: var(--border-hover);
     }
 
-    [data-layout="classic"] .input-card label {
+    .input-card label {
       display: flex;
       flex-direction: column;
       font-weight: 600;
@@ -342,7 +304,8 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .number-stepper {
+    /* custom number stepper */
+    .number-stepper {
       display: flex;
       align-items: center;
       margin-top: 10px;
@@ -353,12 +316,12 @@
       transition: border-color 0.15s, background 0.3s ease;
     }
 
-    [data-layout="classic"] .number-stepper:focus-within {
+    .number-stepper:focus-within {
       border-color: var(--border-focus);
       box-shadow: 0 0 0 4px rgba(107, 107, 122, 0.15);
     }
 
-    [data-layout="classic"] .number-stepper button {
+    .number-stepper button {
       width: 44px;
       height: 48px;
       border: none;
@@ -377,16 +340,16 @@
       line-height: 1;
     }
 
-    [data-layout="classic"] .number-stepper button:hover {
+    .number-stepper button:hover {
       background: var(--bg-die-chip-hover);
       color: var(--text-primary);
     }
 
-    [data-layout="classic"] .number-stepper button:active {
+    .number-stepper button:active {
       background: var(--border-main);
     }
 
-    [data-layout="classic"] .number-stepper input {
+    .number-stepper input {
       flex: 1;
       border: none;
       background: transparent;
@@ -401,13 +364,14 @@
       -moz-appearance: textfield;
     }
 
-    [data-layout="classic"] .number-stepper input::-webkit-outer-spin-button,
-    [data-layout="classic"] .number-stepper input::-webkit-inner-spin-button {
+    .number-stepper input::-webkit-outer-spin-button,
+    .number-stepper input::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
 
-    [data-layout="classic"] .dice-row {
+    /* dice row */
+    .dice-row {
       display: flex;
       flex-wrap: wrap;
       align-items: stretch;
@@ -420,7 +384,7 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .dice-label {
+    .dice-label {
       font-weight: 600;
       color: var(--text-muted);
       font-size: 0.85rem;
@@ -433,7 +397,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .die-chip {
+    .die-chip {
       display: flex;
       align-items: center;
       background: var(--bg-die-chip);
@@ -446,12 +410,12 @@
       min-width: 0;
     }
 
-    [data-layout="classic"] .die-chip:hover {
+    .die-chip:hover {
       border-color: var(--border-hover);
       background: var(--bg-die-chip-hover);
     }
 
-    [data-layout="classic"] .die-chip.fixed {
+    .die-chip.fixed {
       background: var(--bg-fixed);
       border-color: var(--border-light);
       position: relative;
@@ -459,7 +423,7 @@
       flex: 0 0 auto;
     }
 
-    [data-layout="classic"] .die-icon {
+    .die-icon {
       width: 38px;
       height: 38px;
       border-radius: 12px;
@@ -469,17 +433,19 @@
       font-weight: 700;
       font-size: 0.9rem;
       color: #1a1a1f;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      box-shadow: 
+        0 3px 6px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
       position: relative;
       flex-shrink: 0;
       transition: transform 0.1s;
     }
 
-    [data-layout="classic"] .die-chip:hover .die-icon {
+    .die-chip:hover .die-icon {
       transform: scale(1.05);
     }
 
-    [data-layout="classic"] .die-icon::after {
+    .die-icon::after {
       content: '';
       position: absolute;
       inset: 3px;
@@ -488,12 +454,32 @@
       pointer-events: none;
     }
 
-    [data-layout="classic"] .die-white { background: linear-gradient(145deg, #f5f1eb, #ddd6ce); border: 1px solid #b8aea3; color: #2a2520; }
-    [data-layout="classic"] .die-yellow { background: linear-gradient(145deg, #f7dc6f, #d4b53c); border: 1px solid #b89b2e; color: #3d3522; }
-    [data-layout="classic"] .die-red { background: linear-gradient(145deg, #e74c3c, #c0392b); border: 1px solid #a93226; color: #fff3f0; }
-    [data-layout="classic"] .die-black { background: linear-gradient(145deg, #3a3a3a, #1a1a1a); border: 1px solid #555; color: #ccc; }
+    .die-white {
+      background: linear-gradient(145deg, #f5f1eb, #ddd6ce);
+      border: 1px solid #b8aea3;
+      color: #2a2520;
+    }
 
-    [data-layout="classic"] .die-controls {
+    .die-yellow {
+      background: linear-gradient(145deg, #f7dc6f, #d4b53c);
+      border: 1px solid #b89b2e;
+      color: #3d3522;
+    }
+
+    .die-red {
+      background: linear-gradient(145deg, #e74c3c, #c0392b);
+      border: 1px solid #a93226;
+      color: #fff3f0;
+    }
+
+    .die-black {
+      background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+      border: 1px solid #555;
+      color: #ccc;
+    }
+
+    /* dice click controls */
+    .die-controls {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -502,7 +488,7 @@
       justify-content: center;
     }
 
-    [data-layout="classic"] .die-count-btn {
+    .die-count-btn {
       width: 32px;
       height: 32px;
       border-radius: 10px;
@@ -522,17 +508,17 @@
       line-height: 1;
     }
 
-    [data-layout="classic"] .die-count-btn:hover {
+    .die-count-btn:hover {
       background: var(--bg-die-chip-hover);
       color: var(--text-primary);
       border-color: var(--border-hover);
     }
 
-    [data-layout="classic"] .die-count-btn:active {
+    .die-count-btn:active {
       background: var(--border-main);
     }
 
-    [data-layout="classic"] .die-count-value {
+    .die-count-value {
       font-weight: 700;
       font-size: 1.15rem;
       color: var(--text-primary);
@@ -542,7 +528,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .fixed-value {
+    .fixed-value {
       font-weight: 700;
       font-size: 1.3rem;
       color: var(--text-primary);
@@ -552,7 +538,8 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .die-chip.fixed[data-tooltip]:hover::after {
+    /* tooltip */
+    .die-chip.fixed[data-tooltip]:hover::after {
       content: attr(data-tooltip);
       position: absolute;
       bottom: calc(100% + 10px);
@@ -571,7 +558,7 @@
       z-index: 10;
     }
 
-    [data-layout="classic"] .die-chip.fixed[data-tooltip]:hover::before {
+    .die-chip.fixed[data-tooltip]:hover::before {
       content: '';
       position: absolute;
       bottom: calc(100% + 4px);
@@ -583,7 +570,7 @@
       z-index: 10;
     }
 
-    [data-layout="classic"] .calculate-btn {
+    .calculate-btn {
       background: var(--accent);
       color: var(--accent-text);
       border: none;
@@ -603,19 +590,19 @@
       margin-bottom: 28px;
     }
 
-    [data-layout="classic"] .calculate-btn:hover:not(:disabled) {
+    .calculate-btn:hover:not(:disabled) {
       filter: brightness(1.15);
       transform: scale(1.01);
       box-shadow: 0 14px 26px -10px rgba(0, 0, 0, 0.6);
     }
 
-    [data-layout="classic"] .calculate-btn:disabled {
+    .calculate-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
     }
 
-    [data-layout="classic"] .spinner {
+    .spinner {
       width: 18px;
       height: 18px;
       border: 2px solid rgba(15, 15, 18, 0.2);
@@ -627,7 +614,7 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    [data-layout="classic"] .optimal-card {
+    .optimal-card {
       background: var(--bg-card);
       border-radius: 26px;
       padding: 24px 28px;
@@ -637,14 +624,14 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .optimal-header {
+    .optimal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 8px;
     }
 
-    [data-layout="classic"] .optimal-header h2 {
+    .optimal-header h2 {
       font-size: 1.3rem;
       font-weight: 600;
       color: var(--text-primary);
@@ -652,7 +639,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .badge {
+    .badge {
       background: var(--border-main);
       color: var(--text-secondary);
       padding: 4px 14px;
@@ -665,7 +652,7 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .optimal-dice-display {
+    .optimal-dice-display {
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
@@ -673,7 +660,7 @@
       align-items: center;
     }
 
-    [data-layout="classic"] .optimal-die-group {
+    .optimal-die-group {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -684,14 +671,14 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .optimal-die-group .die-icon {
+    .optimal-die-group .die-icon {
       width: 42px;
       height: 42px;
       border-radius: 12px;
       font-size: 0.95rem;
     }
 
-    [data-layout="classic"] .optimal-die-count {
+    .optimal-die-count {
       font-size: 1.6rem;
       font-weight: 700;
       color: var(--text-primary);
@@ -701,7 +688,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .optimal-die-label {
+    .optimal-die-label {
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-muted);
@@ -710,7 +697,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .stats-row {
+    .stats-row {
       display: flex;
       gap: 28px;
       flex-wrap: wrap;
@@ -724,14 +711,14 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .stat strong {
+    .stat strong {
       font-weight: 600;
       color: var(--text-primary);
       margin-right: 6px;
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .results-section {
+    .results-section {
       background: var(--bg-card);
       border-radius: 26px;
       padding: 20px 22px;
@@ -740,7 +727,7 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .results-section h2 {
+    .results-section h2 {
       font-size: 1.2rem;
       font-weight: 600;
       color: var(--text-primary);
@@ -748,7 +735,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .results-section h3 {
+    .results-section h3 {
       font-size: 1rem;
       font-weight: 600;
       color: var(--text-secondary);
@@ -756,13 +743,13 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] table {
+    table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.9rem;
     }
 
-    [data-layout="classic"] th {
+    th {
       text-align: left;
       padding: 8px 6px;
       color: var(--text-muted);
@@ -774,7 +761,7 @@
       transition: color 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] td {
+    td {
       padding: 10px 6px;
       border-bottom: 1px solid var(--border-main);
       color: var(--text-secondary);
@@ -782,23 +769,25 @@
       transition: color 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] tr:last-child td { border-bottom: none; }
+    tr:last-child td {
+      border-bottom: none;
+    }
 
-    [data-layout="classic"] tr.optimal-row td {
+    tr.optimal-row td {
       background-color: var(--optimal-row-bg);
       font-weight: 600;
       color: var(--text-primary);
       border-bottom-color: var(--border-hover);
     }
 
-    [data-layout="classic"] .reroll-prob-section {
+    .reroll-prob-section {
       margin-top: 20px;
       padding-top: 18px;
       border-top: 1px solid var(--border-main);
       transition: border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .reroll-prob-section h3 {
+    .reroll-prob-section h3 {
       font-size: 1rem;
       font-weight: 600;
       color: var(--text-secondary);
@@ -806,14 +795,14 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .reroll-prob-bar {
+    .reroll-prob-bar {
       display: flex;
       align-items: center;
       gap: 12px;
       margin-bottom: 10px;
     }
 
-    [data-layout="classic"] .reroll-prob-label {
+    .reroll-prob-label {
       font-size: 0.85rem;
       font-weight: 500;
       color: var(--text-dim);
@@ -821,7 +810,7 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .reroll-prob-track {
+    .reroll-prob-track {
       flex: 1;
       height: 10px;
       background: var(--bar-track);
@@ -831,14 +820,14 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    [data-layout="classic"] .reroll-prob-fill {
+    .reroll-prob-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--bar-fill-start), var(--bar-fill-end));
       border-radius: 6px;
       transition: width 0.3s ease;
     }
 
-    [data-layout="classic"] .reroll-prob-value {
+    .reroll-prob-value {
       font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-primary);
@@ -847,9 +836,11 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
 
-    [data-layout="classic"] .footer-note {
+    .footer-note {
       text-align: center;
       margin-top: 18px;
       font-size: 0.75rem;
@@ -858,795 +849,25 @@
       transition: color 0.3s ease;
     }
 
-    [data-layout="classic"] .combat-mode .difficulty-card { display: none; }
-
-    /* ============================================================
-       LAYOUT 2 – "COMPACT PANEL" (different structure)
-       ============================================================ */
-    [data-layout="compact"] .calculator {
-      max-width: 860px;
-      width: 100%;
-      background: var(--bg-panel);
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      padding: 20px 22px;
-      border: 1px solid var(--border-main);
-      transition: background 0.3s ease, border-color 0.3s ease;
+    /* combat mode hides difficulty card */
+    .combat-mode .difficulty-card {
+      display: none;
     }
-
-    [data-layout="compact"] .header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--border-main);
-      padding-bottom: 12px;
-    }
-
-    [data-layout="compact"] h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    [data-layout="compact"] h1 span {
-      background: var(--border-main);
-      color: var(--text-secondary);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 30px;
-      letter-spacing: 0.3px;
-      border: 1px solid var(--border-light);
-    }
-
-    [data-layout="compact"] .theme-switcher { display: flex; gap: 6px; align-items: center; }
-    [data-layout="compact"] .theme-btn {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid var(--border-light);
-      cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s;
-      padding: 0;
-    }
-    [data-layout="compact"] .theme-btn:hover { transform: scale(1.2); border-color: var(--text-muted); }
-    [data-layout="compact"] .theme-btn.active { border-color: var(--text-primary); box-shadow: 0 0 0 2px var(--bg-panel), 0 0 0 4px var(--text-primary); }
-    [data-layout="compact"] .theme-btn[data-theme-name="default"] { background: linear-gradient(135deg, #1a1a1f, #f2efea); }
-    [data-layout="compact"] .theme-btn[data-theme-name="ember"] { background: linear-gradient(135deg, #1a1210, #e8805a); }
-    [data-layout="compact"] .theme-btn[data-theme-name="ocean"] { background: linear-gradient(135deg, #0a1218, #5aaae8); }
-    [data-layout="compact"] .theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
-    [data-layout="compact"] .theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
-
-    [data-layout="compact"] .mode-toggle {
-      display: flex;
-      gap: 4px;
-      margin: 12px 0 16px;
-      background: var(--bg-card);
-      border-radius: 40px;
-      padding: 3px;
-      border: 1px solid var(--border-main);
-      width: fit-content;
-    }
-
-    [data-layout="compact"] .mode-option {
-      padding: 8px 18px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-family: 'Inter', sans-serif;
-      transition: all 0.2s ease;
-    }
-    [data-layout="compact"] .mode-option.active {
-      background: var(--accent);
-      color: var(--accent-text);
-    }
-
-    [data-layout="compact"] .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    [data-layout="compact"] .input-card {
-      background: var(--bg-input);
-      border-radius: 12px;
-      padding: 12px 14px;
-      border: 1px solid var(--border-main);
-    }
-
-    [data-layout="compact"] .input-card label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--text-muted);
-    }
-
-    [data-layout="compact"] .number-stepper {
-      display: flex;
-      align-items: center;
-      margin-top: 6px;
-      background: var(--bg-body);
-      border: 1px solid var(--border-light);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    [data-layout="compact"] .number-stepper button {
-      width: 32px;
-      height: 36px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    [data-layout="compact"] .number-stepper button:hover { background: var(--bg-die-chip-hover); color: var(--text-primary); }
-
-    [data-layout="compact"] .number-stepper input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: var(--text-primary);
-      font-size: 1.1rem;
-      font-weight: 600;
-      text-align: center;
-      outline: none;
-      padding: 4px 0;
-      -moz-appearance: textfield;
-    }
-    [data-layout="compact"] .number-stepper input::-webkit-outer-spin-button,
-    [data-layout="compact"] .number-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-    [data-layout="compact"] .dice-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      background: var(--bg-input);
-      border-radius: 14px;
-      padding: 10px 14px;
-      border: 1px solid var(--border-main);
-    }
-
-    [data-layout="compact"] .dice-label {
-      font-weight: 600;
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      white-space: nowrap;
-    }
-
-    [data-layout="compact"] .die-chip {
-      display: flex;
-      align-items: center;
-      background: var(--bg-body);
-      border-radius: 12px;
-      padding: 4px 8px;
-      gap: 6px;
-      border: 1px solid var(--border-main);
-      flex: 0 1 auto;
-    }
-
-    [data-layout="compact"] .die-chip.fixed { background: var(--bg-fixed); }
-
-    [data-layout="compact"] .die-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.75rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-    [data-layout="compact"] .die-white { background: linear-gradient(145deg, #f5f1eb, #ddd6ce); color: #2a2520; }
-    [data-layout="compact"] .die-yellow { background: linear-gradient(145deg, #f7dc6f, #d4b53c); color: #3d3522; }
-    [data-layout="compact"] .die-red { background: linear-gradient(145deg, #e74c3c, #c0392b); color: #fff3f0; }
-    [data-layout="compact"] .die-black { background: linear-gradient(145deg, #3a3a3a, #1a1a1a); color: #ccc; }
-
-    [data-layout="compact"] .die-controls { display: flex; align-items: center; gap: 4px; }
-    [data-layout="compact"] .die-count-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
-      border: 1px solid var(--border-light);
-      background: var(--bg-panel);
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    [data-layout="compact"] .die-count-btn:hover { background: var(--bg-die-chip-hover); color: var(--text-primary); }
-    [data-layout="compact"] .die-count-value {
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--text-primary);
-      min-width: 22px;
-      text-align: center;
-    }
-    [data-layout="compact"] .fixed-value { font-weight: 700; font-size: 1rem; color: var(--text-primary); min-width: 24px; text-align: center; }
-
-    [data-layout="compact"] .die-chip.fixed[data-tooltip]:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--tooltip-bg);
-      color: var(--text-secondary);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      white-space: nowrap;
-      border: 1px solid var(--tooltip-border);
-      z-index: 10;
-    }
-
-    [data-layout="compact"] .calculate-btn {
-      background: var(--accent);
-      color: var(--accent-text);
-      border: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 12px 24px;
-      border-radius: 40px;
-      width: 100%;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    [data-layout="compact"] .calculate-btn:hover:not(:disabled) { filter: brightness(1.15); }
-    [data-layout="compact"] .calculate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    [data-layout="compact"] .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(15,15,18,0.2);
-      border-top-color: var(--accent-text);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: inline-block;
-    }
-
-    [data-layout="compact"] .optimal-card {
-      background: var(--bg-input);
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 18px;
-      border: 1px solid var(--border-main);
-      border-left: 4px solid var(--accent);
-    }
-    [data-layout="compact"] .optimal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    [data-layout="compact"] .optimal-header h2 { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
-    [data-layout="compact"] .badge {
-      background: var(--border-main);
-      color: var(--text-secondary);
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      border: 1px solid var(--border-light);
-    }
-
-    [data-layout="compact"] .optimal-dice-display {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    [data-layout="compact"] .optimal-die-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-body);
-      border-radius: 10px;
-      padding: 4px 10px 4px 6px;
-      border: 1px solid var(--border-main);
-    }
-    [data-layout="compact"] .optimal-die-group .die-icon { width: 32px; height: 32px; font-size: 0.8rem; }
-    [data-layout="compact"] .optimal-die-count { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
-    [data-layout="compact"] .optimal-die-label { font-size: 0.65rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; }
-
-    [data-layout="compact"] .stats-row {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      background: var(--bg-body);
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border-main);
-    }
-    [data-layout="compact"] .stat strong { font-weight: 600; color: var(--text-primary); margin-right: 4px; }
-
-    [data-layout="compact"] .results-section {
-      background: var(--bg-input);
-      border-radius: 14px;
-      padding: 14px 16px;
-      border: 1px solid var(--border-main);
-      margin-bottom: 14px;
-    }
-    [data-layout="compact"] .results-section h2 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
-    [data-layout="compact"] .results-section h3 { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin: 12px 0 6px; }
-
-    [data-layout="compact"] table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    [data-layout="compact"] th {
-      text-align: left;
-      padding: 6px 4px;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      border-bottom: 1px solid var(--border-light);
-    }
-    [data-layout="compact"] td {
-      padding: 6px 4px;
-      border-bottom: 1px solid var(--border-main);
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-    [data-layout="compact"] tr.optimal-row td { background-color: var(--optimal-row-bg); font-weight: 600; color: var(--text-primary); }
-
-    [data-layout="compact"] .reroll-prob-section {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-main);
-    }
-    [data-layout="compact"] .reroll-prob-section h3 { font-size: 0.85rem; margin-bottom: 8px; }
-    [data-layout="compact"] .reroll-prob-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-    [data-layout="compact"] .reroll-prob-label { font-size: 0.75rem; font-weight: 500; color: var(--text-dim); min-width: 80px; }
-    [data-layout="compact"] .reroll-prob-track {
-      flex: 1;
-      height: 8px;
-      background: var(--bar-track);
-      border-radius: 4px;
-      overflow: hidden;
-      border: 1px solid var(--border-main);
-    }
-    [data-layout="compact"] .reroll-prob-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--bar-fill-start), var(--bar-fill-end));
-      border-radius: 4px;
-    }
-    [data-layout="compact"] .reroll-prob-value { font-size: 0.75rem; font-weight: 600; color: var(--text-primary); min-width: 45px; text-align: right; }
-
-    [data-layout="compact"] .hidden { display: none; }
-
-    [data-layout="compact"] .footer-note {
-      text-align: center;
-      margin-top: 12px;
-      font-size: 0.65rem;
-      color: var(--text-muted);
-    }
-
-    [data-layout="compact"] .combat-mode .difficulty-card { display: none; }
-
-    /* ============================================================
-       LAYOUT 3 – "MINIMAL CARD" (different structure)
-       ============================================================ */
-    [data-layout="minimal"] .calculator {
-      max-width: 720px;
-      width: 100%;
-      background: var(--bg-panel);
-      border-radius: 20px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-      padding: 24px 26px;
-      border: 1px solid var(--border-main);
-    }
-
-    [data-layout="minimal"] .header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    [data-layout="minimal"] h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    [data-layout="minimal"] h1 span {
-      background: var(--border-main);
-      color: var(--text-secondary);
-      font-size: 0.7rem;
-      font-weight: 500;
-      padding: 2px 12px;
-      border-radius: 30px;
-      letter-spacing: 0.3px;
-      border: 1px solid var(--border-light);
-    }
-
-    [data-layout="minimal"] .theme-switcher { display: flex; gap: 6px; }
-    [data-layout="minimal"] .theme-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      border: 2px solid var(--border-light);
-      cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s;
-      padding: 0;
-    }
-    [data-layout="minimal"] .theme-btn:hover { transform: scale(1.1); border-color: var(--text-muted); }
-    [data-layout="minimal"] .theme-btn.active { border-color: var(--text-primary); }
-    [data-layout="minimal"] .theme-btn[data-theme-name="default"] { background: linear-gradient(135deg, #1a1a1f, #f2efea); }
-    [data-layout="minimal"] .theme-btn[data-theme-name="ember"] { background: linear-gradient(135deg, #1a1210, #e8805a); }
-    [data-layout="minimal"] .theme-btn[data-theme-name="ocean"] { background: linear-gradient(135deg, #0a1218, #5aaae8); }
-    [data-layout="minimal"] .theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
-    [data-layout="minimal"] .theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
-
-    [data-layout="minimal"] .mode-toggle {
-      display: flex;
-      gap: 2px;
-      margin: 12px 0 16px;
-      background: var(--bg-card);
-      border-radius: 8px;
-      padding: 3px;
-      border: 1px solid var(--border-main);
-      width: fit-content;
-    }
-    [data-layout="minimal"] .mode-option {
-      padding: 6px 16px;
-      border-radius: 6px;
-      font-weight: 500;
-      font-size: 0.8rem;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-family: 'Inter', sans-serif;
-    }
-    [data-layout="minimal"] .mode-option.active { background: var(--accent); color: var(--accent-text); }
-
-    [data-layout="minimal"] .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    [data-layout="minimal"] .input-card {
-      background: transparent;
-      border-radius: 0;
-      padding: 0;
-      border: none;
-      border-bottom: 1px solid var(--border-main);
-      padding-bottom: 6px;
-    }
-
-    [data-layout="minimal"] .input-card label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--text-muted);
-    }
-
-    [data-layout="minimal"] .number-stepper {
-      display: flex;
-      align-items: center;
-      margin-top: 4px;
-      background: transparent;
-      border: none;
-      border-radius: 0;
-    }
-    [data-layout="minimal"] .number-stepper button {
-      width: 28px;
-      height: 32px;
-      border: 1px solid var(--border-light);
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      font-weight: 500;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    [data-layout="minimal"] .number-stepper button:hover { background: var(--bg-die-chip-hover); }
-    [data-layout="minimal"] .number-stepper input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: var(--text-primary);
-      font-size: 1.2rem;
-      font-weight: 500;
-      text-align: center;
-      outline: none;
-      -moz-appearance: textfield;
-    }
-    [data-layout="minimal"] .number-stepper input::-webkit-outer-spin-button,
-    [data-layout="minimal"] .number-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-    [data-layout="minimal"] .dice-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      padding: 12px 16px;
-      border: 1px solid var(--border-main);
-    }
-
-    [data-layout="minimal"] .dice-label {
-      font-weight: 600;
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    [data-layout="minimal"] .die-chip {
-      display: flex;
-      align-items: center;
-      background: var(--bg-input);
-      border-radius: 8px;
-      padding: 4px 8px;
-      gap: 6px;
-      border: 1px solid var(--border-main);
-      flex: 0 1 auto;
-    }
-    [data-layout="minimal"] .die-chip.fixed { background: var(--bg-fixed); }
-
-    [data-layout="minimal"] .die-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.7rem;
-    }
-    [data-layout="minimal"] .die-white { background: #ddd6ce; color: #2a2520; }
-    [data-layout="minimal"] .die-yellow { background: #f7dc6f; color: #3d3522; }
-    [data-layout="minimal"] .die-red { background: #e74c3c; color: #fff3f0; }
-    [data-layout="minimal"] .die-black { background: #3a3a3a; color: #ccc; }
-
-    [data-layout="minimal"] .die-controls { display: flex; align-items: center; gap: 3px; }
-    [data-layout="minimal"] .die-count-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      border: 1px solid var(--border-light);
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    [data-layout="minimal"] .die-count-btn:hover { background: var(--bg-die-chip-hover); color: var(--text-primary); }
-    [data-layout="minimal"] .die-count-value { font-weight: 700; font-size: 0.85rem; color: var(--text-primary); min-width: 20px; text-align: center; }
-    [data-layout="minimal"] .fixed-value { font-weight: 700; font-size: 0.9rem; color: var(--text-primary); min-width: 22px; text-align: center; }
-
-    [data-layout="minimal"] .die-chip.fixed[data-tooltip]:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: calc(100% + 6px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--tooltip-bg);
-      color: var(--text-secondary);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.65rem;
-      white-space: nowrap;
-      border: 1px solid var(--tooltip-border);
-      z-index: 10;
-    }
-
-    [data-layout="minimal"] .calculate-btn {
-      background: var(--accent);
-      color: var(--accent-text);
-      border: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      padding: 12px 24px;
-      border-radius: 8px;
-      width: 100%;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    [data-layout="minimal"] .calculate-btn:hover:not(:disabled) { filter: brightness(1.1); }
-    [data-layout="minimal"] .calculate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    [data-layout="minimal"] .spinner {
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(15,15,18,0.2);
-      border-top-color: var(--accent-text);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: inline-block;
-    }
-
-    [data-layout="minimal"] .optimal-card {
-      background: var(--bg-card);
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin-bottom: 18px;
-      border: 1px solid var(--border-main);
-      border-left: 3px solid var(--accent);
-    }
-    [data-layout="minimal"] .optimal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-    [data-layout="minimal"] .optimal-header h2 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
-    [data-layout="minimal"] .badge {
-      background: var(--border-main);
-      color: var(--text-secondary);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.6rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    [data-layout="minimal"] .optimal-dice-display {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 8px 0;
-    }
-    [data-layout="minimal"] .optimal-die-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-input);
-      border-radius: 6px;
-      padding: 4px 8px;
-      border: 1px solid var(--border-main);
-    }
-    [data-layout="minimal"] .optimal-die-group .die-icon { width: 28px; height: 28px; font-size: 0.7rem; }
-    [data-layout="minimal"] .optimal-die-count { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
-    [data-layout="minimal"] .optimal-die-label { font-size: 0.6rem; font-weight: 500; color: var(--text-muted); }
-
-    [data-layout="minimal"] .stats-row {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      background: var(--bg-input);
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: 1px solid var(--border-main);
-    }
-    [data-layout="minimal"] .stat strong { font-weight: 600; color: var(--text-primary); margin-right: 4px; }
-
-    [data-layout="minimal"] .results-section {
-      background: var(--bg-card);
-      border-radius: 10px;
-      padding: 14px 16px;
-      border: 1px solid var(--border-main);
-      margin-bottom: 14px;
-    }
-    [data-layout="minimal"] .results-section h2 { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
-    [data-layout="minimal"] .results-section h3 { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin: 10px 0 4px; }
-
-    [data-layout="minimal"] table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-    [data-layout="minimal"] th {
-      text-align: left;
-      padding: 4px 2px;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border-light);
-    }
-    [data-layout="minimal"] td { padding: 5px 2px; border-bottom: 1px solid var(--border-main); color: var(--text-secondary); }
-    [data-layout="minimal"] tr.optimal-row td { background-color: var(--optimal-row-bg); font-weight: 600; color: var(--text-primary); }
-
-    [data-layout="minimal"] .reroll-prob-section {
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border-main);
-    }
-    [data-layout="minimal"] .reroll-prob-section h3 { font-size: 0.8rem; margin-bottom: 6px; }
-    [data-layout="minimal"] .reroll-prob-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-    [data-layout="minimal"] .reroll-prob-label { font-size: 0.7rem; font-weight: 500; color: var(--text-dim); min-width: 70px; }
-    [data-layout="minimal"] .reroll-prob-track {
-      flex: 1;
-      height: 6px;
-      background: var(--bar-track);
-      border-radius: 3px;
-      overflow: hidden;
-      border: 1px solid var(--border-main);
-    }
-    [data-layout="minimal"] .reroll-prob-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--bar-fill-start), var(--bar-fill-end));
-      border-radius: 3px;
-    }
-    [data-layout="minimal"] .reroll-prob-value { font-size: 0.7rem; font-weight: 600; color: var(--text-primary); min-width: 40px; text-align: right; }
-
-    [data-layout="minimal"] .hidden { display: none; }
-
-    [data-layout="minimal"] .footer-note {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.6rem;
-      color: var(--text-muted);
-    }
-
-    [data-layout="minimal"] .combat-mode .difficulty-card { display: none; }
   </style>
 </head>
 <body>
-<div class="calculator" id="calculator" data-layout="classic">
-  <!-- HEADER with layout switcher -->
+<div class="calculator" id="calculator">
   <div class="header-row">
     <h1>
       Oathsworn
       <span>dice calc</span>
     </h1>
-    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 12px;">
-      <!-- theme switcher (preserved, works for all layouts) -->
-      <div class="theme-switcher" id="themeSwitcher">
-        <button class="theme-btn" data-theme-name="default" title="Default"></button>
-        <button class="theme-btn" data-theme-name="ember" title="Ember"></button>
-        <button class="theme-btn" data-theme-name="ocean" title="Ocean"></button>
-        <button class="theme-btn" data-theme-name="forest" title="Forest"></button>
-        <button class="theme-btn" data-theme-name="royal" title="Royal"></button>
-      </div>
-      <!-- NEW layout switcher -->
-      <div class="layout-switcher" id="layoutSwitcher">
-        <button class="layout-btn active" data-layout-name="classic">Classic</button>
-        <button class="layout-btn" data-layout-name="compact">Compact</button>
-        <button class="layout-btn" data-layout-name="minimal">Minimal</button>
-      </div>
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn" data-theme-name="default" title="Default"></button>
+      <button class="theme-btn" data-theme-name="ember" title="Ember"></button>
+      <button class="theme-btn" data-theme-name="ocean" title="Ocean"></button>
+      <button class="theme-btn" data-theme-name="forest" title="Forest"></button>
+      <button class="theme-btn" data-theme-name="royal" title="Royal"></button>
     </div>
   </div>
 
@@ -1771,7 +992,7 @@
 
 <script>
   (function() {
-    // ========== THEME PERSISTENCE (localStorage) ==========
+    // ----- THEME PERSISTENCE (localStorage) -----
     const THEME_KEY = 'oathsworn-theme';
     const VALID_THEMES = ['default', 'ember', 'ocean', 'forest', 'royal'];
 
@@ -1781,66 +1002,41 @@
       } else {
         document.documentElement.setAttribute('data-theme', theme);
       }
+      // update active state on buttons
       document.querySelectorAll('.theme-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.themeName === theme);
+        if (b.dataset.themeName === theme) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
       });
     }
 
     function saveTheme(theme) {
-      try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+      try {
+        localStorage.setItem(THEME_KEY, theme);
+      } catch (e) {
+        // localStorage unavailable (e.g. private mode), silently ignore
+      }
     }
 
     function loadTheme() {
       try {
         const saved = localStorage.getItem(THEME_KEY);
-        if (saved && VALID_THEMES.includes(saved)) return saved;
-      } catch (e) {}
+        if (saved && VALID_THEMES.includes(saved)) {
+          return saved;
+        }
+      } catch (e) {
+        // localStorage unavailable
+      }
       return 'default';
     }
 
-    applyTheme(loadTheme());
+    // Apply theme on page load
+    const initialTheme = loadTheme();
+    applyTheme(initialTheme);
 
-    // ========== LAYOUT PERSISTENCE (NEW) ==========
-    const LAYOUT_KEY = 'oathsworn-layout';
-    const VALID_LAYOUTS = ['classic', 'compact', 'minimal'];
-
-    function applyLayout(layout) {
-      const calc = document.getElementById('calculator');
-      if (VALID_LAYOUTS.includes(layout)) {
-        calc.setAttribute('data-layout', layout);
-      } else {
-        calc.setAttribute('data-layout', 'classic');
-      }
-      document.querySelectorAll('.layout-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.layoutName === layout);
-      });
-    }
-
-    function saveLayout(layout) {
-      try { localStorage.setItem(LAYOUT_KEY, layout); } catch (e) {}
-    }
-
-    function loadLayout() {
-      try {
-        const saved = localStorage.getItem(LAYOUT_KEY);
-        if (saved && VALID_LAYOUTS.includes(saved)) return saved;
-      } catch (e) {}
-      return 'classic';
-    }
-
-    const initialLayout = loadLayout();
-    applyLayout(initialLayout);
-
-    // Layout button click handlers
-    document.querySelectorAll('.layout-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const layout = btn.dataset.layoutName;
-        applyLayout(layout);
-        saveLayout(layout);
-      });
-    });
-
-    // ========== DICE DEFINITIONS ==========
+    // ----- DICE DEFINITIONS -----
     const DICE_TYPES = {
       WHITE: {
         name: 'White',
