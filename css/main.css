@@ -226,7 +226,6 @@ h1 span {
   padding: 8px 0;
   min-width: 0;
   width: 100%;
-  -moz-appearance: textfield;
 }
 
 .number-stepper input::-webkit-outer-spin-button,
@@ -584,6 +583,54 @@ h1 span {
   transition: color 0.3s ease;
 }
 
+/* ===== DAMAGE DISTRIBUTION CHART ===== */
+.damage-chart-section {
+  background: var(--bg-card);
+  border-radius: 26px;
+  padding: 22px 22px 18px;
+  border: 1px solid var(--border-main);
+  margin-bottom: 28px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.damage-chart-section h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  transition: color 0.3s ease;
+}
+
+.damage-chart-wrapper {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-main);
+  padding: 12px 8px 4px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.damage-chart-wrapper canvas {
+  display: block;
+  width: 100%;
+}
+
+.damage-chart-legend {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.damage-chart-legend strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+/* ===== RESULTS ===== */
 .results-section {
   background: var(--bg-card);
   border-radius: 26px;
@@ -804,6 +851,10 @@ tr.optimal-row td {
     min-width: 0;
     width: 100%;
   }
+
+  .damage-chart-section {
+    padding: 18px 14px 14px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -936,6 +987,19 @@ tr.optimal-row td {
 
   .reroll-prob-value {
     min-width: 50px;
+    font-size: 0.75rem;
+  }
+
+  .damage-chart-section {
+    padding: 16px 12px 12px;
+    border-radius: 20px;
+  }
+
+  .damage-chart-section h2 {
+    font-size: 1.05rem;
+  }
+
+  .damage-chart-legend {
     font-size: 0.75rem;
   }
 }

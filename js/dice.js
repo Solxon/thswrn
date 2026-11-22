@@ -127,6 +127,30 @@ const DiceEngine = (function () {
     };
   }
 
+  /**
+   * Calculate damage distribution for combat mode.
+   * Damage on a hit = floor(total / armor), capped at 0..6.
+   * Returns an array of 7 probabilities (damage 0 through 6).
+   * Damage 0 includes misses/auto-fails.
+   */
+  function calculateDamageDistribution(diceConfig, armor, modifier, rerollTokens, trials = 40000) {
+    const buckets = new Array(7).fill(0);
+    const armorVal = Math.max(1, armor);
+
+    for (let i = 0; i < trials; i++) {
+      const res = simulateRoll(diceConfig, armorVal, modifier, rerollTokens);
+      let dmg = 0;
+      if (res.success && !res.autoFail) {
+        dmg = Math.floor(res.total / armorVal);
+        if (dmg > 6) dmg = 6;
+        if (dmg < 0) dmg = 0;
+      }
+      buckets[dmg]++;
+    }
+
+    return buckets.map(c => c / trials);
+  }
+
   function formatDiceConfig(cfg) {
     const parts = [];
     if (cfg.white > 0) parts.push(`${cfg.white}W`);
@@ -141,6 +165,7 @@ const DiceEngine = (function () {
     rollDie,
     simulateRoll,
     calculateProbability,
+    calculateDamageDistribution,
     formatDiceConfig
   };
 })();

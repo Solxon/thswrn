@@ -22,7 +22,10 @@ const UI = (function () {
     difficultyCard: document.getElementById('difficultyCard'),
     difficultyLabel: document.getElementById('difficultyLabel'),
     optimalDiceDisplay: document.getElementById('optimalDiceDisplay'),
-    calculator: document.getElementById('calculator')
+    calculator: document.getElementById('calculator'),
+    damageChartSection: document.getElementById('damageChartSection'),
+    damageChartCanvas: document.getElementById('damageChartCanvas'),
+    damageChartLegend: document.getElementById('damageChartLegend')
   };
 
   function buildOptimalDiceDisplay(cfg) {
@@ -112,6 +115,165 @@ const UI = (function () {
     }
   }
 
+  /* ----- Damage distribution chart ----- */
+  function renderDamageChart(distribution, armor) {
+    if (!distribution || distribution.length === 0) {
+      els.damageChartSection.classList.add('hidden');
+      return;
+    }
+    els.damageChartSection.classList.remove('hidden');
+
+    const canvas = els.damageChartCanvas;
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas backing size for crisp rendering
+    const dpr = window.devicePixelRatio || 1;
+    const cssWidth = canvas.parentElement.clientWidth || 600;
+    const cssHeight = 240;
+    canvas.style.width = cssWidth + 'px';
+    canvas.style.height = cssHeight + 'px';
+    canvas.width = cssWidth * dpr;
+    canvas.height = cssHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const width = cssWidth;
+    const height = cssHeight;
+    const padding = { top: 24, right: 18, bottom: 42, left: 52 };
+    const plotW = width - padding.left - padding.right;
+    const plotH = height - padding.top - padding.bottom;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Read theme colors from CSS variables
+    const styles = getComputedStyle(document.documentElement);
+    const colText = styles.getPropertyValue('--text-muted').trim() || '#888';
+    const colGrid = styles.getPropertyValue('--border-main').trim() || '#333';
+    const colAccent = styles.getPropertyValue('--accent').trim() || '#e8805a';
+    const colTrack = styles.getPropertyValue('--bar-track').trim() || '#222';
+
+    const maxProb = Math.max(...distribution, 0.0001);
+    const yMax = Math.ceil(maxProb * 1.15 * 100) / 100; // round up a bit
+    const barGap = 10;
+    const barWidth = (plotW - barGap * (distribution.length - 1)) / distribution.length;
+
+    // Y-axis gridlines & labels
+    const gridLines = 4;
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    for (let i = 0; i <= gridLines; i++) {
+      const frac = i / gridLines;
+      const y = padding.top + plotH - frac * plotH;
+      const val = yMax * frac;
+
+      ctx.strokeStyle = colGrid;
+      ctx.globalAlpha = 0.4;
+      ctx.beginPath();
+      ctx.moveTo(padding.left, y);
+      ctx.lineTo(padding.left + plotW, y);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = colText;
+      ctx.fillText((val * 100).toFixed(0) + '%', padding.left - 8, y);
+    }
+
+    // Bars
+    distribution.forEach((prob, i) => {
+      const x = padding.left + i * (barWidth + barGap);
+      const barH = (prob / yMax) * plotH;
+      const y = padding.top + plotH - barH;
+
+      // Background track
+      ctx.fillStyle = colTrack;
+      ctx.beginPath();
+      roundRect(ctx, x, padding.top, barWidth, plotH, 6);
+      ctx.fill();
+
+      // Bar fill with gradient
+      const grad = ctx.createLinearGradient(0, y, 0, padding.top + plotH);
+      grad.addColorStop(0, colAccent);
+      grad.addColorStop(1, shadeColor(colAccent, -25));
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      roundRect(ctx, x, y, barWidth, Math.max(barH, 2), 6);
+      ctx.fill();
+
+      // Value label above bar
+      if (prob > 0.005) {
+        ctx.fillStyle = colText;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.fillText((prob * 100).toFixed(1) + '%', x + barWidth / 2, y - 4);
+      }
+
+      // X-axis label
+      ctx.fillStyle = colText;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.font = '600 12px Inter, sans-serif';
+      ctx.fillText(String(i), x + barWidth / 2, padding.top + plotH + 10);
+    });
+
+    // X-axis title
+    ctx.fillStyle = colText;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillText('damage dealt', padding.left + plotW / 2, height - 14);
+
+    // Y-axis title (rotated)
+    ctx.save();
+    ctx.translate(12, padding.top + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillText('probability', 0, 0);
+    ctx.restore();
+
+    // Legend for expected damage
+    let expected = 0;
+    distribution.forEach((p, i) => { expected += p * i; });
+    els.damageChartLegend.innerHTML =
+      `Expected damage: <strong>${expected.toFixed(2)}</strong> &nbsp;·&nbsp; ` +
+      `Armor: <strong>${armor}</strong> &nbsp;·&nbsp; ` +
+      `Chance of 0 dmg: <strong>${(distribution[0] * 100).toFixed(1)}%</strong>`;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    if (h < r * 2) r = h / 2;
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+  }
+
+  function shadeColor(hex, percent) {
+    // hex like "#e8805a"
+    let h = hex.replace('#', '');
+    if (h.length === 3) h = h.split('').map(c => c + c).join('');
+    const num = parseInt(h, 16);
+    let r = (num >> 16) & 0xff;
+    let g = (num >> 8) & 0xff;
+    let b = num & 0xff;
+    r = Math.max(0, Math.min(255, r + Math.round(255 * percent / 100)));
+    g = Math.max(0, Math.min(255, g + Math.round(255 * percent / 100)));
+    b = Math.max(0, Math.min(255, b + Math.round(255 * percent / 100)));
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  function showDamageChart(show) {
+    if (show) els.damageChartSection.classList.remove('hidden');
+    else els.damageChartSection.classList.add('hidden');
+  }
+
   function showLoading(show) {
     if (show) {
       els.calcBtn.disabled = true;
@@ -132,6 +294,8 @@ const UI = (function () {
     showOptimal,
     renderResultsTable,
     renderRerollProbability,
+    renderDamageChart,
+    showDamageChart,
     showLoading,
     showResults
   };

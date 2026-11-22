@@ -56,9 +56,12 @@
         els.optimalBadge.textContent = 'highest avg';
         els.difficultyLabel.textContent = 'Enemy Armor';
         els.difficultyInput.value = Math.max(1, parseInt(els.difficultyInput.value) || 5);
+        els.stat1Label.textContent = 'hit chance';
       } else {
         els.optimalBadge.textContent = 'best chance';
         els.difficultyLabel.textContent = 'Difficulty (target sum)';
+        els.stat1Label.textContent = 'success';
+        UI.showDamageChart(false);
       }
     });
   });
@@ -199,6 +202,17 @@
 
       UI.renderResultsTable(sorted, optimal);
       UI.renderRerollProbability(optimal, rerollTokens);
+
+      // Damage distribution chart (combat mode only)
+      if (currentMode === 'combat') {
+        const dist = DiceEngine.calculateDamageDistribution(
+          optimal.diceConfig, difficulty, modifier, rerollTokens
+        );
+        UI.renderDamageChart(dist, difficulty);
+      } else {
+        UI.showDamageChart(false);
+      }
+
       UI.showResults();
       UI.showLoading(false);
     }, 30);
@@ -216,5 +230,18 @@
 
   window.addEventListener('load', () => {
     setTimeout(runCalculation, 100);
+  });
+
+  // Re-render chart on resize (debounced)
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    if (currentMode !== 'combat') return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (!els.damageChartSection.classList.contains('hidden')) {
+        // Re-run calculation to redraw chart at correct size
+        runCalculation();
+      }
+    }, 250);
   });
 })();
