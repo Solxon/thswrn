@@ -227,6 +227,8 @@ h1 span {
   padding: 8px 0;
   min-width: 0;
   width: 100%;
+  -moz-appearance: textfield;
+  appearance: textfield;         
 }
 
 .number-stepper input::-webkit-outer-spin-button,
