@@ -202,7 +202,7 @@ h1 span {
   flex-shrink: 0;
   padding: 0;
   line-height: 1;
-  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .number-stepper button:hover {
@@ -227,8 +227,7 @@ h1 span {
   padding: 8px 0;
   min-width: 0;
   width: 100%;
-  -moz-appearance: textfield;
-  appearance: textfield;         
+  appearance: textfield;    
 }
 
 .number-stepper input::-webkit-outer-spin-button,
