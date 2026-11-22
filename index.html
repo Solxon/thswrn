@@ -370,7 +370,7 @@
       margin: 0;
     }
 
-    /* dice row — now fully responsive */
+    /* dice row — fully responsive */
     .dice-row {
       display: flex;
       flex-wrap: wrap;
@@ -850,9 +850,6 @@
       transition: color 0.3s ease;
     }
 
-    /* combat mode: difficulty card stays visible, but we change its label dynamically */
-    /* (no hiding rule anymore — the .combat-mode .difficulty-card rule is removed) */
-
     /* ===== MOBILE RESPONSIVE DICE POOL ===== */
     @media (max-width: 700px) {
       .dice-row {
@@ -869,7 +866,6 @@
         font-size: 0.8rem;
       }
 
-      /* Each die chip becomes a row with icon left and controls right */
       .die-chip {
         flex: 1 1 100%;
         width: 100%;
@@ -1176,6 +1172,13 @@
     const THEME_KEY = 'oathsworn-theme';
     const VALID_THEMES = ['default', 'ember', 'ocean', 'forest', 'royal'];
 
+    // ----- INPUT PERSISTENCE KEYS -----
+    const STORAGE_KEYS = {
+      difficulty: 'oathsworn-difficulty',
+      modifier: 'oathsworn-modifier',
+      rerolls: 'oathsworn-rerolls'
+    };
+
     function applyTheme(theme) {
       if (theme === 'default' || !VALID_THEMES.includes(theme)) {
         document.documentElement.removeAttribute('data-theme');
@@ -1209,6 +1212,24 @@
 
     const initialTheme = loadTheme();
     applyTheme(initialTheme);
+
+    // ----- INPUT VALUE PERSISTENCE -----
+    function saveInputValue(inputId, value) {
+      try {
+        localStorage.setItem(STORAGE_KEYS[inputId], String(value));
+      } catch (e) {}
+    }
+
+    function loadInputValue(inputId, fallback) {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEYS[inputId]);
+        if (saved !== null) {
+          const num = Number(saved);
+          if (!isNaN(num)) return num;
+        }
+      } catch (e) {}
+      return fallback;
+    }
 
     // ----- DICE DEFINITIONS -----
     const DICE_TYPES = {
@@ -1407,6 +1428,15 @@
     const difficultyLabel = document.getElementById('difficultyLabel');
     const calculator = document.getElementById('calculator');
 
+    // ----- Load persisted input values on page load -----
+    const savedDifficulty = loadInputValue('difficulty', 5);
+    const savedModifier = loadInputValue('modifier', 0);
+    const savedRerolls = loadInputValue('rerolls', 1);
+
+    difficultyInput.value = savedDifficulty;
+    modifierInput.value = savedModifier;
+    rerollsInput.value = savedRerolls;
+
     // ----- state -----
     let diceState = { yellow: 0, red: 0, black: 0 };
     let currentMode = 'success';
@@ -1426,8 +1456,6 @@
           optimalBadge.textContent = 'best chance';
           difficultyLabel.textContent = 'Difficulty (target sum)';
         }
-        // always recalculate when mode changes? optional, but we keep existing behavior
-        // the user can press calculate again. we'll just update the label.
       });
     });
 
@@ -1443,7 +1471,7 @@
       });
     });
 
-    // ----- number stepper controls -----
+    // ----- number stepper controls (with persistence) -----
     document.querySelectorAll('.step-up, .step-down').forEach(btn => {
       btn.addEventListener('click', () => {
         const targetId = btn.dataset.target;
@@ -1455,8 +1483,31 @@
         if (targetId === 'rerolls') min = 0;
         val = Math.max(min, val + delta);
         input.value = val;
+        // Persist the new value
+        saveInputValue(targetId, val);
       });
     });
+
+    // ----- persist input values on manual change (typing) -----
+    function attachPersistence(input, inputId) {
+      input.addEventListener('change', () => {
+        const val = parseFloat(input.value);
+        if (!isNaN(val)) {
+          // enforce min if needed
+          let clean = val;
+          if (inputId === 'difficulty' && clean < 1) clean = 1;
+          if (inputId === 'rerolls' && clean < 0) clean = 0;
+          if (clean !== val) {
+            input.value = clean;
+          }
+          saveInputValue(inputId, clean);
+        }
+      });
+    }
+
+    attachPersistence(difficultyInput, 'difficulty');
+    attachPersistence(modifierInput, 'modifier');
+    attachPersistence(rerollsInput, 'rerolls');
 
     // ----- theme switcher -----
     document.querySelectorAll('.theme-btn').forEach(btn => {
@@ -1469,9 +1520,24 @@
 
     // ----- main calculate function -----
     function runCalculation() {
-      const difficulty = Math.max(1, parseInt(difficultyInput.value) || 5);
-      const modifier = parseInt(modifierInput.value) || 0;
-      const rerollTokens = Math.max(0, parseInt(rerollsInput.value) || 0);
+      // Read current values and persist them before running
+      const rawDifficulty = parseInt(difficultyInput.value) || 5;
+      const rawModifier = parseInt(modifierInput.value) || 0;
+      const rawRerolls = parseInt(rerollsInput.value) || 0;
+
+      const difficulty = Math.max(1, rawDifficulty);
+      const modifier = rawModifier;
+      const rerollTokens = Math.max(0, rawRerolls);
+
+      // Persist the sanitized values
+      saveInputValue('difficulty', difficulty);
+      saveInputValue('modifier', modifier);
+      saveInputValue('rerolls', rerollTokens);
+
+      // Update the input fields if clamping occurred
+      if (difficulty !== rawDifficulty) difficultyInput.value = difficulty;
+      if (rerollTokens !== rawRerolls) rerollsInput.value = rerollTokens;
+
       const maxYellow = diceState.yellow;
       const maxRed = diceState.red;
       const maxBlack = diceState.black;
