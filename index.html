@@ -1272,7 +1272,7 @@
         const input = document.getElementById(targetId);
         const delta = btn.classList.contains('step-up') ? 1 : -1;
         let val = parseFloat(input.value) || 0;
-        let min = 0;
+        let min = -Infinity;
         if (targetId === 'difficulty') min = 1;
         if (targetId === 'rerolls') min = 0;
         val = Math.max(min, val + delta);
