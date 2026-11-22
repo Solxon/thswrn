@@ -1,49 +1,1407 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Page</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f6f8fa;
-            color: #24292e;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        h1 { color: #0366d6; }
-        #status { font-weight: bold; margin-top: 1rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oathsworn · dice calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ===== THEME VARIABLES ===== */
+    :root {
+      --bg-body: #0f0f12;
+      --bg-panel: #1a1a1f;
+      --bg-card: #212128;
+      --bg-input: #18181d;
+      --bg-die-chip: #18181d;
+      --bg-die-chip-hover: #1e1e24;
+      --bg-fixed: #1e1e24;
+      --border-main: #2e2e36;
+      --border-light: #34343e;
+      --border-focus: #6b6b7a;
+      --border-hover: #4a4a56;
+      --text-primary: #f2efea;
+      --text-secondary: #d6cfc7;
+      --text-muted: #9b9188;
+      --text-dim: #b8b0a6;
+      --accent: #f2efea;
+      --accent-text: #0f0f12;
+      --optimal-row-bg: #2a2a34;
+      --spinner-track: #34343e;
+      --tooltip-bg: #2e2e36;
+      --tooltip-border: #4a4a56;
+      --bar-track: #18181d;
+      --bar-fill-start: #6b6b7a;
+      --bar-fill-end: #a89f94;
+    }
+
+    [data-theme="ember"] {
+      --bg-body: #1a1210;
+      --bg-panel: #241a17;
+      --bg-card: #2e211d;
+      --bg-input: #1f1512;
+      --bg-die-chip: #1f1512;
+      --bg-die-chip-hover: #2a1d18;
+      --bg-fixed: #2a1d18;
+      --border-main: #3d2b25;
+      --border-light: #4a352d;
+      --border-focus: #c96a4a;
+      --border-hover: #6b4a3d;
+      --text-primary: #f7ede8;
+      --text-secondary: #e8d5cc;
+      --text-muted: #b89588;
+      --text-dim: #d4b8ad;
+      --accent: #e8805a;
+      --accent-text: #1a1210;
+      --optimal-row-bg: #3d2b25;
+      --spinner-track: #4a352d;
+      --tooltip-bg: #3d2b25;
+      --tooltip-border: #6b4a3d;
+      --bar-track: #1f1512;
+      --bar-fill-start: #c96a4a;
+      --bar-fill-end: #e8a07a;
+    }
+
+    [data-theme="ocean"] {
+      --bg-body: #0a1218;
+      --bg-panel: #0f1a22;
+      --bg-card: #14222d;
+      --bg-input: #0d161d;
+      --bg-die-chip: #0d161d;
+      --bg-die-chip-hover: #12202b;
+      --bg-fixed: #12202b;
+      --border-main: #1e3040;
+      --border-light: #263a4a;
+      --border-focus: #4a8cb5;
+      --border-hover: #3a5a70;
+      --text-primary: #e8f2f7;
+      --text-secondary: #cce0ea;
+      --text-muted: #8aa8b8;
+      --text-dim: #aac4d4;
+      --accent: #5aaae8;
+      --accent-text: #0a1218;
+      --optimal-row-bg: #1e3040;
+      --spinner-track: #263a4a;
+      --tooltip-bg: #1e3040;
+      --tooltip-border: #3a5a70;
+      --bar-track: #0d161d;
+      --bar-fill-start: #3a7aa8;
+      --bar-fill-end: #7ac0e8;
+    }
+
+    [data-theme="forest"] {
+      --bg-body: #0d140f;
+      --bg-panel: #141f17;
+      --bg-card: #1a2a1e;
+      --bg-input: #101a12;
+      --bg-die-chip: #101a12;
+      --bg-die-chip-hover: #162619;
+      --bg-fixed: #162619;
+      --border-main: #243a28;
+      --border-light: #2e4a33;
+      --border-focus: #5aa86a;
+      --border-hover: #3d6a45;
+      --text-primary: #edf7ef;
+      --text-secondary: #d4e8d8;
+      --text-muted: #8ab896;
+      --text-dim: #aad4b4;
+      --accent: #6ac47a;
+      --accent-text: #0d140f;
+      --optimal-row-bg: #243a28;
+      --spinner-track: #2e4a33;
+      --tooltip-bg: #243a28;
+      --tooltip-border: #3d6a45;
+      --bar-track: #101a12;
+      --bar-fill-start: #4a8a55;
+      --bar-fill-end: #8ad49a;
+    }
+
+    [data-theme="royal"] {
+      --bg-body: #120f1a;
+      --bg-panel: #1a1424;
+      --bg-card: #221a30;
+      --bg-input: #161020;
+      --bg-die-chip: #161020;
+      --bg-die-chip-hover: #1e1830;
+      --bg-fixed: #1e1830;
+      --border-main: #30244a;
+      --border-light: #3d2e5a;
+      --border-focus: #8a6ac4;
+      --border-hover: #5a4a80;
+      --text-primary: #f2edf7;
+      --text-secondary: #ddd4e8;
+      --text-muted: #a89ab8;
+      --text-dim: #c4b4d4;
+      --accent: #9a7ae8;
+      --accent-text: #120f1a;
+      --optimal-row-bg: #30244a;
+      --spinner-track: #3d2e5a;
+      --tooltip-bg: #30244a;
+      --tooltip-border: #5a4a80;
+      --bar-track: #161020;
+      --bar-fill-start: #6a4aa8;
+      --bar-fill-end: #aa8ae8;
+    }
+
+    body {
+      background: var(--bg-body);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: var(--text-primary);
+      transition: background 0.3s ease;
+    }
+
+    .calculator {
+      max-width: 1000px;
+      width: 100%;
+      background: var(--bg-panel);
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+      padding: 32px 28px;
+      border: 1px solid var(--border-main);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: color 0.3s ease;
+    }
+
+    h1 span {
+      background: var(--border-main);
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 60px;
+      letter-spacing: 0.3px;
+      border: 1px solid var(--border-light);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* theme switcher */
+    .theme-switcher {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .theme-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border-light);
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      padding: 0;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.15);
+      border-color: var(--text-muted);
+    }
+
+    .theme-btn.active {
+      border-color: var(--text-primary);
+      box-shadow: 0 0 0 2px var(--bg-panel), 0 0 0 4px var(--text-primary);
+    }
+
+    .theme-btn[data-theme-name="default"] { background: linear-gradient(135deg, #1a1a1f, #f2efea); }
+    .theme-btn[data-theme-name="ember"] { background: linear-gradient(135deg, #1a1210, #e8805a); }
+    .theme-btn[data-theme-name="ocean"] { background: linear-gradient(135deg, #0a1218, #5aaae8); }
+    .theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
+    .theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
+
+    /* mode toggle */
+    .mode-toggle {
+      display: flex;
+      gap: 4px;
+      margin: 20px 0 0;
+      background: var(--bg-card);
+      border-radius: 60px;
+      padding: 5px;
+      border: 1px solid var(--border-main);
+      width: fit-content;
+    }
+
+    .mode-option {
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .mode-option:hover {
+      color: var(--text-secondary);
+    }
+
+    .mode-option.active {
+      background: var(--accent);
+      color: var(--accent-text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 26px;
+      margin-top: 24px;
+    }
+
+    .input-card {
+      background: var(--bg-card);
+      border-radius: 22px;
+      padding: 18px 20px;
+      border: 1px solid var(--border-main);
+      transition: border-color 0.15s, background 0.3s ease;
+    }
+
+    .input-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .input-card label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+      transition: color 0.3s ease;
+    }
+
+    /* custom number stepper */
+    .number-stepper {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      background: var(--bg-input);
+      border: 2px solid var(--border-light);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: border-color 0.15s, background 0.3s ease;
+    }
+
+    .number-stepper:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 4px rgba(107, 107, 122, 0.15);
+    }
+
+    .number-stepper button {
+      width: 44px;
+      height: 48px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+      font-family: 'Inter', sans-serif;
+      flex-shrink: 0;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .number-stepper button:hover {
+      background: var(--bg-die-chip-hover);
+      color: var(--text-primary);
+    }
+
+    .number-stepper button:active {
+      background: var(--border-main);
+    }
+
+    .number-stepper input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      text-align: center;
+      outline: none;
+      padding: 8px 0;
+      min-width: 0;
+      -moz-appearance: textfield;
+    }
+
+    .number-stepper input::-webkit-outer-spin-button,
+    .number-stepper input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* dice row */
+    .dice-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 14px;
+      margin-bottom: 28px;
+      background: var(--bg-card);
+      border-radius: 26px;
+      padding: 14px 18px;
+      border: 1px solid var(--border-main);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .dice-label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      padding-left: 4px;
+      transition: color 0.3s ease;
+    }
+
+    .die-chip {
+      display: flex;
+      align-items: center;
+      background: var(--bg-die-chip);
+      border-radius: 18px;
+      padding: 8px 12px;
+      gap: 10px;
+      border: 1px solid var(--border-main);
+      transition: border-color 0.15s, background 0.15s;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .die-chip:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-die-chip-hover);
+    }
+
+    .die-chip.fixed {
+      background: var(--bg-fixed);
+      border-color: var(--border-light);
+      position: relative;
+      cursor: help;
+      flex: 0 0 auto;
+    }
+
+    .die-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1a1a1f;
+      box-shadow: 
+        0 3px 6px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      position: relative;
+      flex-shrink: 0;
+      transition: transform 0.1s;
+    }
+
+    .die-chip:hover .die-icon {
+      transform: scale(1.05);
+    }
+
+    .die-icon::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .die-white {
+      background: linear-gradient(145deg, #f5f1eb, #ddd6ce);
+      border: 1px solid #b8aea3;
+      color: #2a2520;
+    }
+
+    .die-yellow {
+      background: linear-gradient(145deg, #f7dc6f, #d4b53c);
+      border: 1px solid #b89b2e;
+      color: #3d3522;
+    }
+
+    .die-red {
+      background: linear-gradient(145deg, #e74c3c, #c0392b);
+      border: 1px solid #a93226;
+      color: #fff3f0;
+    }
+
+    .die-black {
+      background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+      border: 1px solid #555;
+      color: #ccc;
+    }
+
+    /* dice click controls */
+    .die-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 0;
+      justify-content: center;
+    }
+
+    .die-count-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-input);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      font-family: 'Inter', sans-serif;
+      flex-shrink: 0;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .die-count-btn:hover {
+      background: var(--bg-die-chip-hover);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+    }
+
+    .die-count-btn:active {
+      background: var(--border-main);
+    }
+
+    .die-count-value {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      min-width: 28px;
+      text-align: center;
+      letter-spacing: -0.02em;
+      transition: color 0.3s ease;
+    }
+
+    .fixed-value {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      min-width: 32px;
+      text-align: center;
+      letter-spacing: -0.02em;
+      transition: color 0.3s ease;
+    }
+
+    /* tooltip */
+    .die-chip.fixed[data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--tooltip-bg);
+      color: var(--text-secondary);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 400;
+      white-space: nowrap;
+      border: 1px solid var(--tooltip-border);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .die-chip.fixed[data-tooltip]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--tooltip-bg);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .calculate-btn {
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 16px 28px;
+      border-radius: 60px;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: -0.01em;
+      box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .calculate-btn:hover:not(:disabled) {
+      filter: brightness(1.15);
+      transform: scale(1.01);
+      box-shadow: 0 14px 26px -10px rgba(0, 0, 0, 0.6);
+    }
+
+    .calculate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(15, 15, 18, 0.2);
+      border-top-color: var(--accent-text);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .optimal-card {
+      background: var(--bg-card);
+      border-radius: 26px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      border: 1px solid var(--border-main);
+      border-left: 6px solid var(--accent);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .optimal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .optimal-header h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      transition: color 0.3s ease;
+    }
+
+    .badge {
+      background: var(--border-main);
+      color: var(--text-secondary);
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border: 1px solid var(--border-light);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .optimal-dice-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 16px 0 8px;
+      align-items: center;
+    }
+
+    .optimal-die-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-input);
+      border-radius: 18px;
+      padding: 8px 16px 8px 12px;
+      border: 1px solid var(--border-main);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .optimal-die-group .die-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+    }
+
+    .optimal-die-count {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      min-width: 28px;
+      text-align: center;
+      transition: color 0.3s ease;
+    }
+
+    .optimal-die-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: color 0.3s ease;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      background: var(--bg-input);
+      padding: 12px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border-main);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .stat strong {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-right: 6px;
+      transition: color 0.3s ease;
+    }
+
+    .results-section {
+      background: var(--bg-card);
+      border-radius: 26px;
+      padding: 20px 22px;
+      border: 1px solid var(--border-main);
+      margin-bottom: 20px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .results-section h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      transition: color 0.3s ease;
+    }
+
+    .results-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 20px 0 10px;
+      transition: color 0.3s ease;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 8px 6px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 2px solid var(--border-light);
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    td {
+      padding: 10px 6px;
+      border-bottom: 1px solid var(--border-main);
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr.optimal-row td {
+      background-color: var(--optimal-row-bg);
+      font-weight: 600;
+      color: var(--text-primary);
+      border-bottom-color: var(--border-hover);
+    }
+
+    .reroll-prob-section {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-main);
+      transition: border-color 0.3s ease;
+    }
+
+    .reroll-prob-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      transition: color 0.3s ease;
+    }
+
+    .reroll-prob-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .reroll-prob-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      min-width: 110px;
+      transition: color 0.3s ease;
+    }
+
+    .reroll-prob-track {
+      flex: 1;
+      height: 10px;
+      background: var(--bar-track);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-main);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .reroll-prob-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--bar-fill-start), var(--bar-fill-end));
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+
+    .reroll-prob-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      min-width: 60px;
+      text-align: right;
+      transition: color 0.3s ease;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+      transition: color 0.3s ease;
+    }
+
+    /* combat mode hides difficulty card */
+    .combat-mode .difficulty-card {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Hello!</h1>
-        <p>test</p>
-        
-        <!-- This part runs your code -->
-        <p id="status">Checking JavaScript execution...</p>
+<div class="calculator" id="calculator">
+  <div class="header-row">
+    <h1>
+      Oathsworn
+      <span>dice calc</span>
+    </h1>
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme-name="default" title="Default"></button>
+      <button class="theme-btn" data-theme-name="ember" title="Ember"></button>
+      <button class="theme-btn" data-theme-name="ocean" title="Ocean"></button>
+      <button class="theme-btn" data-theme-name="forest" title="Forest"></button>
+      <button class="theme-btn" data-theme-name="royal" title="Royal"></button>
+    </div>
+  </div>
+
+  <!-- mode toggle -->
+  <div class="mode-toggle" id="modeToggle">
+    <button class="mode-option active" data-mode="success">Success mode</button>
+    <button class="mode-option" data-mode="combat">Combat mode</button>
+  </div>
+
+  <!-- main inputs -->
+  <div class="input-grid">
+    <div class="input-card difficulty-card" id="difficultyCard">
+      <label>Difficulty (target sum)</label>
+      <div class="number-stepper">
+        <button type="button" class="step-down" data-target="difficulty">−</button>
+        <input type="number" id="difficulty" min="1" value="5" step="1">
+        <button type="button" class="step-up" data-target="difficulty">+</button>
+      </div>
+    </div>
+    <div class="input-card">
+      <label>Modifier (added to total)</label>
+      <div class="number-stepper">
+        <button type="button" class="step-down" data-target="modifier">−</button>
+        <input type="number" id="modifier" value="0" step="1">
+        <button type="button" class="step-up" data-target="modifier">+</button>
+      </div>
+    </div>
+    <div class="input-card">
+      <label>Reroll tokens</label>
+      <div class="number-stepper">
+        <button type="button" class="step-down" data-target="rerolls">−</button>
+        <input type="number" id="rerolls" min="0" value="1" step="1">
+        <button type="button" class="step-up" data-target="rerolls">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- dice pool -->
+  <div class="dice-row">
+    <span class="dice-label">Dice pool</span>
+    <div class="die-chip fixed" data-tooltip="You always have up to 10 white dice available to roll, but you choose how many to use.">
+      <div class="die-icon die-white">W</div>
+      <span class="fixed-value">10</span>
+    </div>
+    <div class="die-chip">
+      <div class="die-icon die-yellow">Y</div>
+      <div class="die-controls">
+        <button type="button" class="die-count-btn" data-die="yellow" data-delta="-1">−</button>
+        <span class="die-count-value" id="yellowCount">0</span>
+        <button type="button" class="die-count-btn" data-die="yellow" data-delta="1">+</button>
+      </div>
+    </div>
+    <div class="die-chip">
+      <div class="die-icon die-red">R</div>
+      <div class="die-controls">
+        <button type="button" class="die-count-btn" data-die="red" data-delta="-1">−</button>
+        <span class="die-count-value" id="redCount">0</span>
+        <button type="button" class="die-count-btn" data-die="red" data-delta="1">+</button>
+      </div>
+    </div>
+    <div class="die-chip">
+      <div class="die-icon die-black">B</div>
+      <div class="die-controls">
+        <button type="button" class="die-count-btn" data-die="black" data-delta="-1">−</button>
+        <span class="die-count-value" id="blackCount">0</span>
+        <button type="button" class="die-count-btn" data-die="black" data-delta="1">+</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="calculate-btn" id="calcBtn">
+    <span>Calculate optimal dice</span>
+  </button>
+
+  <!-- loading state -->
+  <div id="loading" class="hidden" style="text-align:center; padding:16px; color:var(--text-muted); font-weight:500;">
+    <span class="spinner"></span>
+    <span style="margin-left: 10px;">running simulations…</span>
+  </div>
+
+  <!-- optimal result card -->
+  <div id="optimalCard" class="optimal-card hidden">
+    <div class="optimal-header">
+      <h2>Optimal strategy</h2>
+      <div class="badge" id="optimalBadge">best</div>
     </div>
 
-    <script>
-        // Simple script to verify that JavaScript is running
-        document.addEventListener("DOMContentLoaded", () => {
-            const statusElement = document.getElementById("status");
-            statusElement.textContent = "JavaScript is running successfully!";
-            statusElement.style.color = "green";
-            console.log("GitHub Pages verification successful.");
+    <div class="optimal-dice-display" id="optimalDiceDisplay"></div>
+
+    <div class="stats-row" id="optimalStats">
+      <div class="stat"><strong id="stat1Label">success</strong> <span id="optSuccess">—</span></div>
+      <div class="stat"><strong id="stat2Label">auto‑fail</strong> <span id="optFail">—</span></div>
+      <div class="stat"><strong>avg total</strong> <span id="optAvg">—</span></div>
+    </div>
+  </div>
+
+  <!-- detailed results table -->
+  <div id="resultsSection" class="results-section hidden">
+    <h2>Top configurations</h2>
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>dice combination</th>
+          <th id="thSuccess">success</th>
+          <th id="thFail">auto‑fail</th>
+          <th>avg total</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+
+    <div id="rerollProbSection" class="reroll-prob-section hidden">
+      <h3>Reroll token usage probability</h3>
+      <div id="rerollProbBars"></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    White dice pool is fixed at 10. You may choose any number up to 10 to roll.
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ----- DICE DEFINITIONS -----
+    const DICE_TYPES = {
+      WHITE: {
+        name: 'White',
+        faces: [0, 0, 1, 1, 2, { value: 2, critical: true }]
+      },
+      YELLOW: {
+        name: 'Yellow',
+        faces: [0, 0, 1, 2, 3, { value: 3, critical: true }]
+      },
+      RED: {
+        name: 'Red',
+        faces: [0, 0, 2, 3, 3, { value: 4, critical: true }]
+      },
+      BLACK: {
+        name: 'Black',
+        faces: [0, 0, 3, 3, 4, { value: 5, critical: true }]
+      }
+    };
+
+    // ----- roll a single die (with exploding crits, crits can chain) -----
+    function rollDie(dieType) {
+      const faces = DICE_TYPES[dieType].faces;
+      let total = 0;
+      let face = faces[Math.floor(Math.random() * faces.length)];
+
+      while (typeof face === 'object' && face.critical) {
+        total += face.value;
+        face = faces[Math.floor(Math.random() * faces.length)];
+      }
+
+      total += (typeof face === 'object') ? face.value : face;
+
+      const isBlank = (typeof face !== 'object' && face === 0) ||
+                      (typeof face === 'object' && face.value === 0);
+
+      return { total, isBlank };
+    }
+
+    // ----- simulate a full roll with reroll logic, track tokens used -----
+    // Rerolls only used if current total (incl modifier) < difficulty
+    function simulateRoll(diceConfig, difficulty, modifier, rerollTokens) {
+      let rolls = [];
+      for (let i = 0; i < diceConfig.white; i++) rolls.push({ ...rollDie('WHITE'), type: 'WHITE' });
+      for (let i = 0; i < diceConfig.yellow; i++) rolls.push({ ...rollDie('YELLOW'), type: 'YELLOW' });
+      for (let i = 0; i < diceConfig.red; i++) rolls.push({ ...rollDie('RED'), type: 'RED' });
+      for (let i = 0; i < diceConfig.black; i++) rolls.push({ ...rollDie('BLACK'), type: 'BLACK' });
+
+      if (rolls.length === 0) {
+        const total = modifier;
+        const success = total >= difficulty;
+        return { success, total: success ? total : 0, autoFail: false, tokensUsed: 0 };
+      }
+
+      let blankCount = rolls.filter(r => r.isBlank).length;
+      let rawTotal = rolls.reduce((s, r) => s + r.total, 0);
+      let autoFail = blankCount >= 2;
+
+      let tokensUsed = 0;
+      let tokensLeft = rerollTokens;
+
+      while (tokensLeft > 0 && rolls.length > 0) {
+        // stop rerolling if already met target or already auto-failed
+        if (!autoFail && (rawTotal + modifier) >= difficulty) break;
+        if (autoFail) break;
+
+        let worstIndex = -1;
+        let worstScore = Infinity;
+
+        for (let i = 0; i < rolls.length; i++) {
+          const r = rolls[i];
+          if (r.isBlank) {
+            worstIndex = i;
+            break;
+          }
+          if (r.total < worstScore) {
+            worstScore = r.total;
+            worstIndex = i;
+          }
+        }
+
+        if (worstIndex === -1) break;
+
+        const worstDie = rolls[worstIndex];
+        const shouldReroll = worstDie.isBlank || worstDie.total <= 1;
+
+        if (!shouldReroll) break;
+
+        const type = worstDie.type;
+        rolls.splice(worstIndex, 1);
+        const newRoll = { ...rollDie(type), type };
+        rolls.push(newRoll);
+
+        rawTotal = rolls.reduce((s, r) => s + r.total, 0);
+        blankCount = rolls.filter(r => r.isBlank).length;
+        autoFail = blankCount >= 2;
+
+        tokensUsed++;
+        tokensLeft--;
+      }
+
+      const finalTotal = autoFail ? 0 : rawTotal + modifier;
+      const success = !autoFail && finalTotal >= difficulty;
+
+      return { success, total: finalTotal, autoFail, tokensUsed };
+    }
+
+    // ----- monte carlo probability -----
+    // increased trials to 40000 for better accuracy
+    function calculateProbability(diceConfig, difficulty, modifier, rerollTokens, trials = 40000) {
+      let successes = 0;
+      let autoFails = 0;
+      let totalSum = 0;
+      const tokenUsageCounts = new Array(rerollTokens + 1).fill(0);
+
+      for (let i = 0; i < trials; i++) {
+        const res = simulateRoll(diceConfig, difficulty, modifier, rerollTokens);
+        if (res.success) successes++;
+        if (res.autoFail) autoFails++;
+        totalSum += res.total;
+        tokenUsageCounts[res.tokensUsed]++;
+      }
+
+      const tokenUsageProbs = tokenUsageCounts.map(c => c / trials);
+
+      return {
+        diceConfig: { ...diceConfig },
+        successRate: successes / trials,
+        autoFailRate: autoFails / trials,
+        averageTotal: totalSum / trials,
+        tokenUsageProbs
+      };
+    }
+
+    // ----- format dice config -----
+    function formatDiceConfig(cfg) {
+      const parts = [];
+      if (cfg.white > 0) parts.push(`${cfg.white}W`);
+      if (cfg.yellow > 0) parts.push(`${cfg.yellow}Y`);
+      if (cfg.red > 0) parts.push(`${cfg.red}R`);
+      if (cfg.black > 0) parts.push(`${cfg.black}B`);
+      return parts.join(' + ') || '0';
+    }
+
+    // ----- build visual dice display -----
+    function buildOptimalDiceDisplay(cfg) {
+      const container = document.getElementById('optimalDiceDisplay');
+      container.innerHTML = '';
+
+      const types = [
+        { key: 'white', css: 'die-white', label: 'White' },
+        { key: 'yellow', css: 'die-yellow', label: 'Yellow' },
+        { key: 'red', css: 'die-red', label: 'Red' },
+        { key: 'black', css: 'die-black', label: 'Black' }
+      ];
+
+      let any = false;
+      types.forEach(t => {
+        const count = cfg[t.key];
+        if (count > 0) {
+          any = true;
+          const group = document.createElement('div');
+          group.className = 'optimal-die-group';
+          group.innerHTML = `
+            <div class="die-icon ${t.css}">${t.label[0]}</div>
+            <span class="optimal-die-count">${count}</span>
+            <span class="optimal-die-label">${t.label}</span>
+          `;
+          container.appendChild(group);
+        }
+      });
+
+      if (!any) {
+        container.innerHTML = '<span style="color:var(--text-muted); font-size:0.9rem;">No dice selected</span>';
+      }
+    }
+
+    // ----- DOM elements -----
+    const difficultyInput = document.getElementById('difficulty');
+    const modifierInput = document.getElementById('modifier');
+    const rerollsInput = document.getElementById('rerolls');
+    const calcBtn = document.getElementById('calcBtn');
+    const loadingDiv = document.getElementById('loading');
+    const optimalCard = document.getElementById('optimalCard');
+    const resultsSection = document.getElementById('resultsSection');
+    const optSuccess = document.getElementById('optSuccess');
+    const optFail = document.getElementById('optFail');
+    const optAvg = document.getElementById('optAvg');
+    const resultsBody = document.getElementById('resultsBody');
+    const rerollProbSection = document.getElementById('rerollProbSection');
+    const rerollProbBars = document.getElementById('rerollProbBars');
+    const optimalBadge = document.getElementById('optimalBadge');
+    const stat1Label = document.getElementById('stat1Label');
+    const stat2Label = document.getElementById('stat2Label');
+    const thSuccess = document.getElementById('thSuccess');
+    const thFail = document.getElementById('thFail');
+    const difficultyCard = document.getElementById('difficultyCard');
+    const calculator = document.getElementById('calculator');
+
+    // ----- state -----
+    let diceState = { yellow: 0, red: 0, black: 0 };
+    let currentMode = 'success';
+
+    // ----- mode toggle -----
+    document.querySelectorAll('.mode-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-option').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+
+        if (currentMode === 'combat') {
+          optimalBadge.textContent = 'highest avg';
+          calculator.classList.add('combat-mode');
+        } else {
+          optimalBadge.textContent = 'best chance';
+          calculator.classList.remove('combat-mode');
+        }
+        // results stay visible (do not hide)
+      });
+    });
+
+    // ----- dice click controls -----
+    document.querySelectorAll('.die-count-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const die = btn.dataset.die;
+        const delta = parseInt(btn.dataset.delta);
+        const max = 10;
+        const newVal = Math.max(0, Math.min(max, diceState[die] + delta));
+        diceState[die] = newVal;
+        document.getElementById(die + 'Count').textContent = newVal;
+        // results stay visible
+      });
+    });
+
+    // ----- number stepper controls -----
+    document.querySelectorAll('.step-up, .step-down').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const input = document.getElementById(targetId);
+        const delta = btn.classList.contains('step-up') ? 1 : -1;
+        let val = parseFloat(input.value) || 0;
+        let min = 0;
+        if (targetId === 'difficulty') min = 1;
+        if (targetId === 'rerolls') min = 0;
+        val = Math.max(min, val + delta);
+        input.value = val;
+        // results stay visible
+      });
+    });
+
+    // ----- theme switcher -----
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const theme = btn.dataset.themeName;
+        if (theme === 'default') {
+          document.documentElement.removeAttribute('data-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      });
+    });
+
+    // ----- main calculate function -----
+    function runCalculation() {
+      const difficulty = Math.max(1, parseInt(difficultyInput.value) || 5);
+      const modifier = parseInt(modifierInput.value) || 0;
+      const rerollTokens = Math.max(0, parseInt(rerollsInput.value) || 0);
+      const maxYellow = diceState.yellow;
+      const maxRed = diceState.red;
+      const maxBlack = diceState.black;
+      const MAX_WHITE = 10;
+      const MAX_TOTAL_DICE = 10;
+
+      calcBtn.disabled = true;
+      loadingDiv.classList.remove('hidden');
+      // results stay visible during recalc (no hiding)
+
+      setTimeout(() => {
+        const allResults = [];
+
+        for (let w = 0; w <= MAX_WHITE; w++) {
+          for (let y = 0; y <= maxYellow; y++) {
+            for (let r = 0; r <= maxRed; r++) {
+              for (let b = 0; b <= maxBlack; b++) {
+                const totalDice = w + y + r + b;
+                if (totalDice === 0) continue;
+                if (totalDice > MAX_TOTAL_DICE) continue; // discard combos with >10 total dice
+                const cfg = { white: w, yellow: y, red: r, black: b };
+                const res = calculateProbability(cfg, difficulty, modifier, rerollTokens);
+                allResults.push(res);
+              }
+            }
+          }
+        }
+
+        if (allResults.length === 0) {
+          const fallback = calculateProbability({ white: 1, yellow: 0, red: 0, black: 0 }, difficulty, modifier, rerollTokens);
+          allResults.push(fallback);
+        }
+
+        // ----- choose optimal based on mode -----
+        let optimal;
+        if (currentMode === 'combat') {
+          // Combat: highest avg total; if within 0.9 of another config, prefer higher success rate
+          const maxAvg = Math.max(...allResults.map(r => r.averageTotal));
+          const nearBest = allResults.filter(r => (maxAvg - r.averageTotal) <= 0.9);
+          optimal = nearBest.reduce((best, cur) => {
+            if (cur.successRate > best.successRate) return cur;
+            if (cur.successRate === best.successRate && cur.averageTotal > best.averageTotal) return cur;
+            return best;
+          }, nearBest[0]);
+        } else {
+          // Success: highest success rate, then lowest auto-fail, then highest avg total
+          optimal = allResults.reduce((best, cur) => {
+            if (cur.successRate > best.successRate) return cur;
+            if (cur.successRate === best.successRate && cur.autoFailRate < best.autoFailRate) return cur;
+            if (cur.successRate === best.successRate && cur.autoFailRate === best.autoFailRate && cur.averageTotal > best.averageTotal) return cur;
+            return best;
+          }, allResults[0]);
+        }
+
+        // display optimal
+        buildOptimalDiceDisplay(optimal.diceConfig);
+        optSuccess.textContent = (optimal.successRate * 100).toFixed(2) + '%';
+        optFail.textContent = (optimal.autoFailRate * 100).toFixed(2) + '%';
+        optAvg.textContent = optimal.averageTotal.toFixed(2);
+        optimalCard.classList.remove('hidden');
+
+        // ----- sort results -----
+        let sorted;
+        if (currentMode === 'combat') {
+          sorted = [...allResults].sort((a, b) => {
+            if (b.averageTotal !== a.averageTotal) return b.averageTotal - a.averageTotal;
+            return b.successRate - a.successRate;
+          });
+        } else {
+          sorted = [...allResults].sort((a, b) => {
+            if (b.successRate !== a.successRate) return b.successRate - a.successRate;
+            if (a.autoFailRate !== b.autoFailRate) return a.autoFailRate - b.autoFailRate;
+            return b.averageTotal - a.averageTotal;
+          });
+        }
+
+        const top = sorted.slice(0, 12);
+        resultsBody.innerHTML = '';
+
+        top.forEach(res => {
+          const tr = document.createElement('tr');
+          const isOptimal = res.diceConfig.white === optimal.diceConfig.white &&
+                            res.diceConfig.yellow === optimal.diceConfig.yellow &&
+                            res.diceConfig.red === optimal.diceConfig.red &&
+                            res.diceConfig.black === optimal.diceConfig.black;
+          if (isOptimal) tr.classList.add('optimal-row');
+
+          tr.innerHTML = `
+            <td>${formatDiceConfig(res.diceConfig)}</td>
+            <td>${(res.successRate * 100).toFixed(2)}%</td>
+            <td>${(res.autoFailRate * 100).toFixed(2)}%</td>
+            <td>${res.averageTotal.toFixed(2)}</td>
+          `;
+          resultsBody.appendChild(tr);
         });
-    </script>
+
+        // ---- reroll token usage probability for optimal config ----
+        if (rerollTokens > 0) {
+          rerollProbSection.classList.remove('hidden');
+          rerollProbBars.innerHTML = '';
+
+          for (let k = 0; k <= rerollTokens; k++) {
+            const prob = optimal.tokenUsageProbs[k] || 0;
+            const pct = (prob * 100).toFixed(2);
+
+            const barDiv = document.createElement('div');
+            barDiv.className = 'reroll-prob-bar';
+            barDiv.innerHTML = `
+              <div class="reroll-prob-label">${k} token${k !== 1 ? 's' : ''} used</div>
+              <div class="reroll-prob-track">
+                <div class="reroll-prob-fill" style="width: ${pct}%"></div>
+              </div>
+              <div class="reroll-prob-value">${pct}%</div>
+            `;
+            rerollProbBars.appendChild(barDiv);
+          }
+        } else {
+          rerollProbSection.classList.add('hidden');
+        }
+
+        resultsSection.classList.remove('hidden');
+        loadingDiv.classList.add('hidden');
+        calcBtn.disabled = false;
+      }, 30);
+    }
+
+    calcBtn.addEventListener('click', runCalculation);
+
+    // Enter key in any input triggers calculation
+    const inputs = [difficultyInput, modifierInput, rerollsInput];
+    inputs.forEach(inp => inp.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        runCalculation();
+      }
+    }));
+
+    window.addEventListener('load', () => {
+      setTimeout(runCalculation, 100);
+    });
+  })();
+</script>
 </body>
 </html>
