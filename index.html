@@ -1330,7 +1330,7 @@
         let optimal;
         if (currentMode === 'combat') {
           const maxAvg = Math.max(...allResults.map(r => r.averageTotal));
-          const nearBest = allResults.filter(r => (maxAvg - r.averageTotal) <= 0.9);
+          const nearBest = allResults.filter(r => (maxAvg - r.averageTotal) <= 0.15);
           optimal = nearBest.reduce((best, cur) => {
             if (cur.successRate > best.successRate) return cur;
             if (cur.successRate === best.successRate && cur.averageTotal > best.averageTotal) return cur;
