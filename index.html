@@ -863,7 +863,7 @@
       <span>dice calc</span>
     </h1>
     <div class="theme-switcher" id="themeSwitcher">
-      <button class="theme-btn active" data-theme-name="default" title="Default"></button>
+      <button class="theme-btn" data-theme-name="default" title="Default"></button>
       <button class="theme-btn" data-theme-name="ember" title="Ember"></button>
       <button class="theme-btn" data-theme-name="ocean" title="Ocean"></button>
       <button class="theme-btn" data-theme-name="forest" title="Forest"></button>
@@ -992,6 +992,50 @@
 
 <script>
   (function() {
+    // ----- THEME PERSISTENCE (localStorage) -----
+    const THEME_KEY = 'oathsworn-theme';
+    const VALID_THEMES = ['default', 'ember', 'ocean', 'forest', 'royal'];
+
+    function applyTheme(theme) {
+      if (theme === 'default' || !VALID_THEMES.includes(theme)) {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      // update active state on buttons
+      document.querySelectorAll('.theme-btn').forEach(b => {
+        if (b.dataset.themeName === theme) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+    }
+
+    function saveTheme(theme) {
+      try {
+        localStorage.setItem(THEME_KEY, theme);
+      } catch (e) {
+        // localStorage unavailable (e.g. private mode), silently ignore
+      }
+    }
+
+    function loadTheme() {
+      try {
+        const saved = localStorage.getItem(THEME_KEY);
+        if (saved && VALID_THEMES.includes(saved)) {
+          return saved;
+        }
+      } catch (e) {
+        // localStorage unavailable
+      }
+      return 'default';
+    }
+
+    // Apply theme on page load
+    const initialTheme = loadTheme();
+    applyTheme(initialTheme);
+
     // ----- DICE DEFINITIONS -----
     const DICE_TYPES = {
       WHITE: {
@@ -1032,7 +1076,6 @@
     }
 
     // ----- simulate a full roll with reroll logic, track tokens used -----
-    // Rerolls only used if current total (incl modifier) < difficulty
     function simulateRoll(diceConfig, difficulty, modifier, rerollTokens) {
       let rolls = [];
       for (let i = 0; i < diceConfig.white; i++) rolls.push({ ...rollDie('WHITE'), type: 'WHITE' });
@@ -1054,7 +1097,6 @@
       let tokensLeft = rerollTokens;
 
       while (tokensLeft > 0 && rolls.length > 0) {
-        // stop rerolling if already met target or already auto-failed
         if (!autoFail && (rawTotal + modifier) >= difficulty) break;
         if (autoFail) break;
 
@@ -1100,7 +1142,6 @@
     }
 
     // ----- monte carlo probability -----
-    // increased trials to 40000 for better accuracy
     function calculateProbability(diceConfig, difficulty, modifier, rerollTokens, trials = 40000) {
       let successes = 0;
       let autoFails = 0;
@@ -1209,7 +1250,6 @@
           optimalBadge.textContent = 'best chance';
           calculator.classList.remove('combat-mode');
         }
-        // results stay visible (do not hide)
       });
     });
 
@@ -1222,7 +1262,6 @@
         const newVal = Math.max(0, Math.min(max, diceState[die] + delta));
         diceState[die] = newVal;
         document.getElementById(die + 'Count').textContent = newVal;
-        // results stay visible
       });
     });
 
@@ -1238,21 +1277,15 @@
         if (targetId === 'rerolls') min = 0;
         val = Math.max(min, val + delta);
         input.value = val;
-        // results stay visible
       });
     });
 
-    // ----- theme switcher -----
+    // ----- theme switcher (with persistence) -----
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
         const theme = btn.dataset.themeName;
-        if (theme === 'default') {
-          document.documentElement.removeAttribute('data-theme');
-        } else {
-          document.documentElement.setAttribute('data-theme', theme);
-        }
+        applyTheme(theme);
+        saveTheme(theme);
       });
     });
 
@@ -1269,7 +1302,6 @@
 
       calcBtn.disabled = true;
       loadingDiv.classList.remove('hidden');
-      // results stay visible during recalc (no hiding)
 
       setTimeout(() => {
         const allResults = [];
@@ -1280,7 +1312,7 @@
               for (let b = 0; b <= maxBlack; b++) {
                 const totalDice = w + y + r + b;
                 if (totalDice === 0) continue;
-                if (totalDice > MAX_TOTAL_DICE) continue; // discard combos with >10 total dice
+                if (totalDice > MAX_TOTAL_DICE) continue;
                 const cfg = { white: w, yellow: y, red: r, black: b };
                 const res = calculateProbability(cfg, difficulty, modifier, rerollTokens);
                 allResults.push(res);
@@ -1297,7 +1329,6 @@
         // ----- choose optimal based on mode -----
         let optimal;
         if (currentMode === 'combat') {
-          // Combat: highest avg total; if within 0.9 of another config, prefer higher success rate
           const maxAvg = Math.max(...allResults.map(r => r.averageTotal));
           const nearBest = allResults.filter(r => (maxAvg - r.averageTotal) <= 0.9);
           optimal = nearBest.reduce((best, cur) => {
@@ -1306,7 +1337,6 @@
             return best;
           }, nearBest[0]);
         } else {
-          // Success: highest success rate, then lowest auto-fail, then highest avg total
           optimal = allResults.reduce((best, cur) => {
             if (cur.successRate > best.successRate) return cur;
             if (cur.successRate === best.successRate && cur.autoFailRate < best.autoFailRate) return cur;
