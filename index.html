@@ -150,6 +150,90 @@
       --bar-fill-end: #aa8ae8;
     }
 
+    /* ===== NEW THEME: CRIMSON ===== */
+    [data-theme="crimson"] {
+      --bg-body: #160c0e;
+      --bg-panel: #1f1013;
+      --bg-card: #2a1519;
+      --bg-input: #1a0d0f;
+      --bg-die-chip: #1a0d0f;
+      --bg-die-chip-hover: #241215;
+      --bg-fixed: #241215;
+      --border-main: #3d1f25;
+      --border-light: #4a262d;
+      --border-focus: #e85a5a;
+      --border-hover: #6b3a40;
+      --text-primary: #f7e8e8;
+      --text-secondary: #e8cccc;
+      --text-muted: #b88888;
+      --text-dim: #d4b0b0;
+      --accent: #e85a5a;
+      --accent-text: #160c0e;
+      --optimal-row-bg: #3d1f25;
+      --spinner-track: #4a262d;
+      --tooltip-bg: #3d1f25;
+      --tooltip-border: #6b3a40;
+      --bar-track: #1a0d0f;
+      --bar-fill-start: #c94a4a;
+      --bar-fill-end: #e88a8a;
+    }
+
+    /* ===== NEW THEME: SLATE ===== */
+    [data-theme="slate"] {
+      --bg-body: #0e1114;
+      --bg-panel: #161a1f;
+      --bg-card: #1e232a;
+      --bg-input: #12161a;
+      --bg-die-chip: #12161a;
+      --bg-die-chip-hover: #1a1f25;
+      --bg-fixed: #1a1f25;
+      --border-main: #2a3038;
+      --border-light: #333a44;
+      --border-focus: #7a8a9a;
+      --border-hover: #4a5560;
+      --text-primary: #eef1f4;
+      --text-secondary: #d0d6dc;
+      --text-muted: #8a949e;
+      --text-dim: #b0b8c0;
+      --accent: #9aaab8;
+      --accent-text: #0e1114;
+      --optimal-row-bg: #2a3038;
+      --spinner-track: #333a44;
+      --tooltip-bg: #2a3038;
+      --tooltip-border: #4a5560;
+      --bar-track: #12161a;
+      --bar-fill-start: #6a7a8a;
+      --bar-fill-end: #b0c0d0;
+    }
+
+    /* ===== NEW THEME: SAND ===== */
+    [data-theme="sand"] {
+      --bg-body: #1a1712;
+      --bg-panel: #221e18;
+      --bg-card: #2e2820;
+      --bg-input: #1f1b15;
+      --bg-die-chip: #1f1b15;
+      --bg-die-chip-hover: #2a241c;
+      --bg-fixed: #2a241c;
+      --border-main: #3d3528;
+      --border-light: #4a4032;
+      --border-focus: #d4a85a;
+      --border-hover: #6b5d45;
+      --text-primary: #f7f2e8;
+      --text-secondary: #e8dcc8;
+      --text-muted: #b8a888;
+      --text-dim: #d4c4a8;
+      --accent: #d4a85a;
+      --accent-text: #1a1712;
+      --optimal-row-bg: #3d3528;
+      --spinner-track: #4a4032;
+      --tooltip-bg: #3d3528;
+      --tooltip-border: #6b5d45;
+      --bar-track: #1f1b15;
+      --bar-fill-start: #b88a3a;
+      --bar-fill-end: #e8c88a;
+    }
+
     body {
       background: var(--bg-body);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -210,6 +294,7 @@
       display: flex;
       gap: 8px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .theme-btn {
@@ -237,6 +322,9 @@
     .theme-btn[data-theme-name="ocean"] { background: linear-gradient(135deg, #0a1218, #5aaae8); }
     .theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
     .theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
+    .theme-btn[data-theme-name="crimson"] { background: linear-gradient(135deg, #160c0e, #e85a5a); }
+    .theme-btn[data-theme-name="slate"] { background: linear-gradient(135deg, #0e1114, #9aaab8); }
+    .theme-btn[data-theme-name="sand"] { background: linear-gradient(135deg, #1a1712, #d4a85a); }
 
     /* mode toggle */
     .mode-toggle {
@@ -1044,6 +1132,9 @@
       <button class="theme-btn" data-theme-name="ocean" title="Ocean"></button>
       <button class="theme-btn" data-theme-name="forest" title="Forest"></button>
       <button class="theme-btn" data-theme-name="royal" title="Royal"></button>
+      <button class="theme-btn" data-theme-name="crimson" title="Crimson"></button>
+      <button class="theme-btn" data-theme-name="slate" title="Slate"></button>
+      <button class="theme-btn" data-theme-name="sand" title="Sand"></button>
     </div>
   </div>
 
@@ -1170,13 +1261,16 @@
   (function() {
     // ----- THEME PERSISTENCE (localStorage) -----
     const THEME_KEY = 'oathsworn-theme';
-    const VALID_THEMES = ['default', 'ember', 'ocean', 'forest', 'royal'];
+    const VALID_THEMES = ['default', 'ember', 'ocean', 'forest', 'royal', 'crimson', 'slate', 'sand'];
 
     // ----- INPUT PERSISTENCE KEYS -----
     const STORAGE_KEYS = {
       difficulty: 'oathsworn-difficulty',
       modifier: 'oathsworn-modifier',
-      rerolls: 'oathsworn-rerolls'
+      rerolls: 'oathsworn-rerolls',
+      yellow: 'oathsworn-dice-yellow',
+      red: 'oathsworn-dice-red',
+      black: 'oathsworn-dice-black'
     };
 
     function applyTheme(theme) {
@@ -1437,9 +1531,18 @@
     modifierInput.value = savedModifier;
     rerollsInput.value = savedRerolls;
 
-    // ----- state -----
-    let diceState = { yellow: 0, red: 0, black: 0 };
+    // ----- state (with persistence) -----
+    let diceState = {
+      yellow: loadInputValue('yellow', 0),
+      red: loadInputValue('red', 0),
+      black: loadInputValue('black', 0)
+    };
     let currentMode = 'success';
+
+    // Initialize dice count displays from persisted state
+    document.getElementById('yellowCount').textContent = diceState.yellow;
+    document.getElementById('redCount').textContent = diceState.red;
+    document.getElementById('blackCount').textContent = diceState.black;
 
     // ----- mode toggle -----
     document.querySelectorAll('.mode-option').forEach(btn => {
@@ -1459,7 +1562,7 @@
       });
     });
 
-    // ----- dice click controls -----
+    // ----- dice click controls (with persistence) -----
     document.querySelectorAll('.die-count-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const die = btn.dataset.die;
@@ -1468,6 +1571,8 @@
         const newVal = Math.max(0, Math.min(max, diceState[die] + delta));
         diceState[die] = newVal;
         document.getElementById(die + 'Count').textContent = newVal;
+        // Persist the dice pool count
+        saveInputValue(die, newVal);
       });
     });
 
@@ -1493,7 +1598,6 @@
       input.addEventListener('change', () => {
         const val = parseFloat(input.value);
         if (!isNaN(val)) {
-          // enforce min if needed
           let clean = val;
           if (inputId === 'difficulty' && clean < 1) clean = 1;
           if (inputId === 'rerolls' && clean < 0) clean = 0;
