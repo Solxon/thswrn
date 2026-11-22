@@ -1,0 +1,889 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-body);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  color: var(--text-primary);
+  transition: background 0.3s ease;
+}
+
+.calculator {
+  max-width: 1000px;
+  width: 100%;
+  background: var(--bg-panel);
+  border-radius: 28px;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+  padding: 32px 28px;
+  border: 1px solid var(--border-main);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: color 0.3s ease;
+}
+
+h1 span {
+  background: var(--border-main);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 60px;
+  letter-spacing: 0.3px;
+  border: 1px solid var(--border-light);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* theme switcher */
+.theme-switcher {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.theme-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  padding: 0;
+}
+
+.theme-btn:hover {
+  transform: scale(1.15);
+  border-color: var(--text-muted);
+}
+
+.theme-btn.active {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px var(--bg-panel), 0 0 0 4px var(--text-primary);
+}
+
+.theme-btn[data-theme-name="default"] { background: linear-gradient(135deg, #1a1a1f, #f2efea); }
+.theme-btn[data-theme-name="ember"] { background: linear-gradient(135deg, #1a1210, #e8805a); }
+.theme-btn[data-theme-name="ocean"] { background: linear-gradient(135deg, #0a1218, #5aaae8); }
+.theme-btn[data-theme-name="forest"] { background: linear-gradient(135deg, #0d140f, #6ac47a); }
+.theme-btn[data-theme-name="royal"] { background: linear-gradient(135deg, #120f1a, #9a7ae8); }
+.theme-btn[data-theme-name="crimson"] { background: linear-gradient(135deg, #160c0e, #e85a5a); }
+.theme-btn[data-theme-name="slate"] { background: linear-gradient(135deg, #0e1114, #9aaab8); }
+.theme-btn[data-theme-name="sand"] { background: linear-gradient(135deg, #1a1712, #d4a85a); }
+
+/* mode toggle */
+.mode-toggle {
+  display: flex;
+  gap: 4px;
+  margin: 20px 0 0;
+  background: var(--bg-card);
+  border-radius: 60px;
+  padding: 5px;
+  border: 1px solid var(--border-main);
+  width: fit-content;
+}
+
+.mode-option {
+  padding: 10px 24px;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.mode-option:hover {
+  color: var(--text-secondary);
+}
+
+.mode-option.active {
+  background: var(--accent);
+  color: var(--accent-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  margin-bottom: 26px;
+  margin-top: 24px;
+}
+
+.input-card {
+  background: var(--bg-card);
+  border-radius: 22px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-main);
+  transition: border-color 0.15s, background 0.3s ease;
+}
+
+.input-card:hover {
+  border-color: var(--border-hover);
+}
+
+.input-card label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+/* custom number stepper */
+.number-stepper {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  background: var(--bg-input);
+  border: 2px solid var(--border-light);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: border-color 0.15s, background 0.3s ease;
+}
+
+.number-stepper:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 4px rgba(107, 107, 122, 0.15);
+}
+
+.number-stepper button {
+  width: 44px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  font-family: 'Inter', sans-serif;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.number-stepper button:hover {
+  background: var(--bg-die-chip-hover);
+  color: var(--text-primary);
+}
+
+.number-stepper button:active {
+  background: var(--border-main);
+}
+
+.number-stepper input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+  outline: none;
+  padding: 8px 0;
+  min-width: 0;
+  -moz-appearance: textfield;
+}
+
+.number-stepper input::-webkit-outer-spin-button,
+.number-stepper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* dice row — fully responsive */
+.dice-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 14px;
+  margin-bottom: 28px;
+  background: var(--bg-card);
+  border-radius: 26px;
+  padding: 14px 18px;
+  border: 1px solid var(--border-main);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.dice-label {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+  transition: color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.die-chip {
+  display: flex;
+  align-items: center;
+  background: var(--bg-die-chip);
+  border-radius: 18px;
+  padding: 8px 12px;
+  gap: 10px;
+  border: 1px solid var(--border-main);
+  transition: border-color 0.15s, background 0.15s;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.die-chip:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-die-chip-hover);
+}
+
+.die-chip.fixed {
+  background: var(--bg-fixed);
+  border-color: var(--border-light);
+  position: relative;
+  cursor: help;
+  flex: 0 0 auto;
+}
+
+.die-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1a1a1f;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+  flex-shrink: 0;
+  transition: transform 0.1s;
+}
+
+.die-chip:hover .die-icon {
+  transform: scale(1.05);
+}
+
+.die-icon::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.die-white {
+  background: linear-gradient(145deg, #f5f1eb, #ddd6ce);
+  border: 1px solid #b8aea3;
+  color: #2a2520;
+}
+
+.die-yellow {
+  background: linear-gradient(145deg, #f7dc6f, #d4b53c);
+  border: 1px solid #b89b2e;
+  color: #3d3522;
+}
+
+.die-red {
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+  border: 1px solid #a93226;
+  color: #fff3f0;
+}
+
+.die-black {
+  background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+  border: 1px solid #555;
+  color: #ccc;
+}
+
+/* dice click controls */
+.die-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+}
+
+.die-count-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  font-family: 'Inter', sans-serif;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.die-count-btn:hover {
+  background: var(--bg-die-chip-hover);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.die-count-btn:active {
+  background: var(--border-main);
+}
+
+.die-count-value {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  min-width: 28px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
+}
+
+.fixed-value {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  min-width: 32px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
+}
+
+/* tooltip */
+.die-chip.fixed[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tooltip-bg);
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 400;
+  white-space: nowrap;
+  border: 1px solid var(--tooltip-border);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.die-chip.fixed[data-tooltip]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--tooltip-bg);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.calculate-btn {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 16px 28px;
+  border-radius: 60px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: -0.01em;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.calculate-btn:hover:not(:disabled) {
+  filter: brightness(1.15);
+  transform: scale(1.01);
+  box-shadow: 0 14px 26px -10px rgba(0, 0, 0, 0.6);
+}
+
+.calculate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(15, 15, 18, 0.2);
+  border-top-color: var(--accent-text);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.optimal-card {
+  background: var(--bg-card);
+  border-radius: 26px;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border-main);
+  border-left: 6px solid var(--accent);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.optimal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.optimal-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease;
+}
+
+.badge {
+  background: var(--border-main);
+  color: var(--text-secondary);
+  padding: 4px 14px;
+  border-radius: 40px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border: 1px solid var(--border-light);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.optimal-dice-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 16px 0 8px;
+  align-items: center;
+}
+
+.optimal-die-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-input);
+  border-radius: 18px;
+  padding: 8px 16px 8px 12px;
+  border: 1px solid var(--border-main);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.optimal-die-group .die-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+.optimal-die-count {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  min-width: 28px;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.optimal-die-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transition: color 0.3s ease;
+}
+
+.stats-row {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  background: var(--bg-input);
+  padding: 12px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--border-main);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.stat strong {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-right: 6px;
+  transition: color 0.3s ease;
+}
+
+.results-section {
+  background: var(--bg-card);
+  border-radius: 26px;
+  padding: 20px 22px;
+  border: 1px solid var(--border-main);
+  margin-bottom: 20px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.results-section h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  transition: color 0.3s ease;
+}
+
+.results-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 20px 0 10px;
+  transition: color 0.3s ease;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th {
+  text-align: left;
+  padding: 8px 6px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border-bottom: 2px solid var(--border-light);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+td {
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--border-main);
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr.optimal-row td {
+  background-color: var(--optimal-row-bg);
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom-color: var(--border-hover);
+}
+
+.reroll-prob-section {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-main);
+  transition: border-color 0.3s ease;
+}
+
+.reroll-prob-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+.reroll-prob-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.reroll-prob-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  min-width: 110px;
+  transition: color 0.3s ease;
+}
+
+.reroll-prob-track {
+  flex: 1;
+  height: 10px;
+  background: var(--bar-track);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border-main);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.reroll-prob-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--bar-fill-start), var(--bar-fill-end));
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.reroll-prob-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 60px;
+  text-align: right;
+  transition: color 0.3s ease;
+}
+
+.hidden {
+  display: none;
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  transition: color 0.3s ease;
+}
+
+/* ===== MOBILE RESPONSIVE DICE POOL ===== */
+@media (max-width: 700px) {
+  .dice-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 16px 14px;
+  }
+
+  .dice-label {
+    padding-left: 0;
+    justify-content: center;
+    margin-bottom: 4px;
+    font-size: 0.8rem;
+  }
+
+  .die-chip {
+    flex: 1 1 100%;
+    width: 100%;
+    padding: 10px 14px;
+    justify-content: space-between;
+  }
+
+  .die-chip.fixed {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    gap: 14px;
+  }
+
+  .die-controls {
+    flex: 0 1 auto;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .die-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+  }
+
+  .die-count-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+  }
+
+  .die-count-value {
+    font-size: 1.1rem;
+    min-width: 24px;
+  }
+
+  .fixed-value {
+    font-size: 1.2rem;
+    min-width: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator {
+    padding: 20px 14px;
+    border-radius: 20px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  h1 span {
+    font-size: 0.9rem;
+    padding: 4px 12px;
+  }
+
+  .mode-toggle {
+    width: 100%;
+  }
+
+  .mode-option {
+    flex: 1;
+    text-align: center;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+
+  .input-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .input-card {
+    padding: 14px 16px;
+    border-radius: 18px;
+  }
+
+  .number-stepper button {
+    width: 40px;
+    height: 44px;
+  }
+
+  .number-stepper input {
+    font-size: 1.3rem;
+  }
+
+  .dice-row {
+    padding: 14px 12px;
+    border-radius: 20px;
+  }
+
+  .die-chip {
+    padding: 8px 10px;
+    border-radius: 14px;
+  }
+
+  .die-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.75rem;
+    border-radius: 9px;
+  }
+
+  .die-count-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+  }
+
+  .calculate-btn {
+    padding: 14px 20px;
+    font-size: 1rem;
+    border-radius: 40px;
+  }
+
+  .optimal-card {
+    padding: 18px 16px;
+    border-radius: 20px;
+  }
+
+  .optimal-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .optimal-die-group {
+    padding: 6px 12px 6px 10px;
+  }
+
+  .optimal-die-count {
+    font-size: 1.3rem;
+  }
+
+  .stats-row {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .results-section {
+    padding: 16px 14px;
+    border-radius: 20px;
+  }
+
+  th, td {
+    padding: 6px 4px;
+    font-size: 0.8rem;
+  }
+
+  .reroll-prob-label {
+    min-width: 80px;
+    font-size: 0.75rem;
+  }
+
+  .reroll-prob-value {
+    min-width: 50px;
+    font-size: 0.75rem;
+  }
+}
